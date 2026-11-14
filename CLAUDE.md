@@ -26,7 +26,7 @@ Build v1 only (see docs/design-summary.md). New ideas go to the design doc's par
 ## Working agreements
 - **Owner's code level:** comfortable with scripting (PowerShell). Write plain, well-named code; a short header
   per file saying what it's for; comment WHY on anything non-obvious. No clever tricks.
-- **Workflow:** one branch + pull request per feature; `main` must always build and play. Kenny merges.
+- **Workflow:** one branch + pull request per feature; `main` must always build and play. The owner merges.
 - **Autonomy:** decide small, ask big. Make implementation and minor design calls yourself (log them in
   docs/decisions.md). Ask before anything that changes how the game plays or feels, or expands scope.
 - **Versions:** tag each playable milestone (v0.1 "cell", v0.2 ...) with a plain-English CHANGELOG.md entry.
