@@ -1,4 +1,4 @@
-# Sea Dragon — guidance for Claude sessions
+# Sea Cell — guidance for Claude sessions
 
 Design source of truth: the "Space Race Roguelike — Design Doc" (Claude Docs). Snapshot: docs/design-summary.md.
 
