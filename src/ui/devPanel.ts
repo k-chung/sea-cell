@@ -46,6 +46,7 @@ export function renderDevPanel(opts: {
   return `
   <aside class="dev" aria-label="Developer panel">
     <h2>Dev panel ${button({ act: 'dev', label: 'Close' })}</h2>
+    <p><a href="./gallery.html" target="_blank" rel="noopener">Scene gallery</a>: every screen at once (local dev builds only).</p>
     ${runInfo}
     <div class="dev-group">
       <h3>Run</h3>

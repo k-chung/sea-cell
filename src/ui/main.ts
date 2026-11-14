@@ -5,13 +5,14 @@ import './styles.css';
 import type { Balance } from '../content/types.ts';
 import {
   actionsUntilTurn, createGame, dateLabel, lookup, newSeed, replay, step, STATE_VERSION,
-  type Action, type GameState, type ProgramAction, type RunRecord,
+  type Action, type GameState, type ProgramAction, type RocketChoice, type RunRecord,
 } from '../core/index.ts';
 import { renderDevPanel } from './devPanel.ts';
+import { play, type SoundName } from './sound.ts';
 import { draftPlan, emptyDraft, renderApp, type Draft } from './render.ts';
 import { baseRuleset, withOverrides } from './ruleset.ts';
 import {
-  addNote, addToHall, clearNotes, loadBalanceOverrides, loadNotes, loadSave, loadTextSize,
+  addNote, addToHall, clearNotes, loadBalanceOverrides, loadSound, saveSound, loadNotes, loadSave, loadTextSize,
   saveBalanceOverrides, saveTextSize, SAVE_VERSION, writeSave, type FeedbackNote,
 } from './storage.ts';
 
@@ -29,6 +30,8 @@ const app = {
   storyMode: false,
   error: null as string | null,
   noteOpen: false,
+  soundOn: loadSound(),
+  lastRocket: null as RocketChoice | null,
   /** Two-step confirm for deleting notes. */
   confirmClearNotes: false,
 };
@@ -41,7 +44,8 @@ const devRoot = document.getElementById('dev') as HTMLElement;
 
 function startRun(overrides: Partial<Balance>): void {
   app.runOverrides = overrides;
-  const seed = newSeed();
+  const urlSeed = Number(new URLSearchParams(location.search).get('seed'));
+  const seed = Number.isInteger(urlSeed) && urlSeed > 0 ? urlSeed : newSeed();
   app.run = { rulesetId: baseRuleset.id, seed, options: { storyMode: app.storyMode }, actions: [] };
   app.state = createGame(ruleset(), seed, app.run.options);
   app.draft = emptyDraft();
@@ -79,9 +83,23 @@ function dispatch(action: Action): void {
   }
   app.run.actions.push(action);
   app.error = null;
+  if (action.type === 'launch') app.lastRocket = action.rocket;
+  soundFor(action, app.state);
   if (app.state.phase === 'plan' && before.phase !== 'plan') app.draft = emptyDraft();
   if (app.state.phase === 'over' && before.phase !== 'over') recordHall(app.state);
   save();
+}
+
+/** Pick the sound for what just happened (only when sound is on). */
+function soundFor(action: Action, s: GameState): void {
+  if (!app.soundOn) return;
+  const result: SoundName = s.lastResult === 'success' ? 'success' : s.lastResult === 'abort' ? 'click' : 'fail';
+  if (action.type === 'launch') {
+    play('launch');
+    setTimeout(() => play(s.phase === 'crisis' ? 'alarm' : result), 1000);
+  } else {
+    play(action.type === 'chooseOption' ? result : 'click');
+  }
 }
 
 function recordHall(s: GameState): void {
@@ -203,6 +221,11 @@ function onAct(act: string, arg: string, el: HTMLElement): void {
     case 'note-save': saveNote(); break;
     case 'note-cancel': app.noteOpen = false; break;
     case 'dev': app.devOpen = !app.devOpen; break;
+    case 'sound':
+      app.soundOn = !app.soundOn;
+      saveSound(app.soundOn);
+      if (app.soundOn) play('click');
+      break;
     case 'text-smaller': setTextSize(loadTextSize() - 1); break;
     case 'text-larger': setTextSize(loadTextSize() + 1); break;
 
@@ -299,6 +322,7 @@ function render(): void {
   root.innerHTML = renderApp({
     state: app.state, ruleset: ruleset(), draft: app.draft,
     hasSave: !!loadSave(), storyMode: app.storyMode, error: app.error, noteOpen: app.noteOpen,
+    soundOn: app.soundOn, lastRocket: app.lastRocket,
   });
   devRoot.innerHTML = app.devOpen
     ? renderDevPanel({
@@ -311,7 +335,7 @@ function render(): void {
   const phase = app.state?.phase ?? 'title';
   const same = focusKey ? document.querySelector<HTMLElement>(`[data-key="${CSS.escape(focusKey)}"]`) : null;
   if (same && phase === lastPhase) same.focus();
-  else if (phase !== lastPhase) root.querySelector<HTMLElement>('.options button, button.primary')?.focus();
+  else if (phase !== lastPhase) root.querySelector<HTMLElement>('.options button, button.primary:not(:disabled)')?.focus({ preventScroll: true });
   lastPhase = phase;
   if (scrollToBuilder) {
     root.querySelector('#builder')?.scrollIntoView({ block: 'start' });

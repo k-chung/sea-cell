@@ -2,6 +2,15 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-14 — v0.2 build choices
+- **UI-only animation, all CSS.** Log lines reveal with staggered delays; alarm shake and result stamps are
+  keyframes. No timers in game logic, so replays and tests are unaffected; reduced-motion turns it all off.
+- **Sprites are SVG built from text maps** (content/sprites.ts), colored by CSS tokens, so the theme controls them.
+- **Sound is synthesized** with Web Audio: nothing to source or license; off by default.
+- **New dev dependency: `@playwright/test` 1.63.0** for E2E tests (pinned to match the browser in the dev
+  environment). CI installs Chromium and runs them.
+- **One dark look only.** The CRT direction is deliberately dark; the light theme was dropped.
+
 ## 2026-11-14 — Ideas move to GitHub Issues
 The design doc's inbox was hard to find (a hidden tab on phones). Ideas now go in as GitHub Issues
 (template applies the `idea` label) and are sorted at the start of every session into accepted, parked or

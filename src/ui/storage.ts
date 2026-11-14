@@ -75,6 +75,9 @@ export function addNote(note: FeedbackNote): void {
 }
 export const clearNotes = () => write('notes', []);
 
+export const loadSound = () => read<boolean>('sound', false);
+export const saveSound = (on: boolean) => write('sound', on);
+
 export const loadTextSize = () => read<number>('textSize', 2);
 export const saveTextSize = (n: number) => write('textSize', n);
 
