@@ -10,7 +10,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "bot": "node tools/balance-bot.ts",
-    "golden:update": "node tools/update-golden.ts"
+    "golden:update": "node tools/update-golden.ts",
+    "build:single": "npm run build && node tools/build-single-file.ts"
   },
   "devDependencies": {
     "@types/node": "22.20.5",

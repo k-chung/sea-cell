@@ -15,8 +15,9 @@
   --good: #1d6b35;
   color-scheme: light;
 }
+/* Dark theme: follows the OS setting unless a page host forces light/dark with data-theme. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #15171a;
     --panel: #1e2125;
     --text: #e8e8e6;
@@ -31,6 +32,20 @@
     color-scheme: dark;
   }
 }
+:root[data-theme='dark'] {
+  --bg: #15171a;
+  --panel: #1e2125;
+  --text: #e8e8e6;
+  --muted: #a3a3a0;
+  --line: #3b3f45;
+  --accent: #7fb0ff;
+  --accent-bg: #1f2c44;
+  --blue-option: #8ab4ff;
+  --blue-bg: #1b2a45;
+  --warn: #ff8a80;
+  --good: #81c995;
+  color-scheme: dark;
+}
 
 * { box-sizing: border-box; }
 body {
@@ -39,7 +54,13 @@ body {
   color: var(--text);
   font: 1rem/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
-#app { max-width: 1200px; margin: 0 auto; padding: 0 16px 48px; }
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-block: 0 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
 h1, h2, h3 { line-height: 1.2; }
 h2 { font-size: 1.15rem; margin: 0.6rem 0; }
 h3 { font-size: 1rem; margin: 0.9rem 0 0.4rem; }
@@ -67,7 +88,7 @@ button:disabled { opacity: 0.55; cursor: not-allowed; }
 button.primary { background: var(--accent); color: var(--panel); border-color: var(--accent); font-weight: 700; padding: 0.55rem 1.1rem; }
 button[aria-pressed='true'] { border: 2px solid var(--accent); background: var(--accent-bg); }
 
-header { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 0; }
+header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 0; }
 .topline, .stats { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
 .brand { font-weight: 800; letter-spacing: 0.08em; }
 .tools { margin-left: auto; display: flex; flex-wrap: wrap; gap: 6px; }
@@ -107,7 +128,9 @@ header { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bot
 
 .dev {
   position: fixed; top: 0; right: 0; bottom: 0; width: min(440px, 100vw); overflow: auto; z-index: 5;
-  background: var(--panel); border-left: 2px solid var(--accent); padding: 12px 14px; font-size: 0.9rem;
+  background: var(--panel); border-left: 2px solid var(--accent); font-size: 0.9rem;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) calc(14px + env(safe-area-inset-right, 0px))
+    calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
 }
 .dev-group { border-top: 1px solid var(--line); padding: 6px 0 10px; }
 .dev-group button { margin: 3px 4px 3px 0; }

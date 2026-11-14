@@ -224,9 +224,10 @@ export function rewardLabel(r: Ruleset, c: RewardChoice): { title: string; detai
   if (c.kind === 'part') {
     const p = getPart(r, c.id);
     const seats = p.crewSeats ? `, ${p.crewSeats} seats` : '';
+    const lift = p.slot === 'payload' ? `${p.payloadKind ?? 'payload'}` : `Lift ${p.lift}`;
     return {
       title: `New part: ${p.name} (${p.slot})`,
-      detail: `Lift ${p.lift}, reliability ${p.reliability}%, cost ${p.cost}, ${p.fuel}${seats}. ${p.description}`,
+      detail: `${lift}, reliability ${p.reliability}%, cost ${p.cost}, ${p.fuel}${seats}. ${p.description}`,
     };
   }
   const f = getFavor(r, c.id);
