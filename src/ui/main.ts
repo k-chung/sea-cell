@@ -231,6 +231,9 @@ function onAct(act: string, arg: string, el: HTMLElement): void {
     case 'dev-budget': dispatch({ type: 'dev', command: 'addBudget', amount: 50 }); break;
     case 'dev-load': loadReportText((document.getElementById('dev-load') as HTMLTextAreaElement).value); break;
     case 'dev-download-notes': download('sea-cell-notes.json', loadNotes()); break;
+    case 'dev-copy-notes':
+      navigator.clipboard?.writeText(JSON.stringify(loadNotes())).catch(() => undefined);
+      break;
     case 'dev-clear-notes':
       if (app.confirmClearNotes) clearNotes();
       app.confirmClearNotes = !app.confirmClearNotes;

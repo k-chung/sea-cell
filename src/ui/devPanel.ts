@@ -68,7 +68,9 @@ export function renderDevPanel(opts: {
     </div>
     <div class="dev-group">
       <h3>Playtest notes (${notes.length})</h3>
+      ${button({ act: 'dev-copy-notes', label: 'Copy notes', disabled: !notes.length })}
       ${button({ act: 'dev-download-notes', label: 'Download notes', disabled: !notes.length })}
+      <p class="muted">Downloads don't work when the game runs as a hosted page; use Copy and paste the text anywhere.</p>
       ${button({ act: 'dev-clear-notes', label: opts.confirmClearNotes ? 'Really delete all notes?' : 'Clear notes', disabled: !notes.length })}
     </div>
     <div class="dev-group">
