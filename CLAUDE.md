@@ -21,7 +21,35 @@ Design source of truth: the "Space Race Roguelike — Design Doc" (Claude Docs).
 - Core rules get unit tests; the balance bot runs on core only.
 
 ## Scope
-Build v1 only (see docs/design-summary.md). New ideas go to the design doc's parking lot unless they make the launch crisis more tense or meaningful.
+Build the current version's scope only (see docs/design-summary.md). New ideas go to the Ideas inbox and are triaged (see "Adding ideas later").
+
+## Design for change (top priority)
+The owner expects to say "this direction sucks" and change things, from small details to big systems.
+The code must be easy for a human to debug and maintain, and cheap to change.
+
+Human-debuggable
+- Small files with one job each; small functions with descriptive names; no metaprogramming or magic.
+- State is plain data a person can read in the dev panel or a JSON export.
+- Fail loudly with helpful messages: a bad content file names the file, the entry and the field.
+- Prefer obvious code over clever code, and a little duplication over the wrong abstraction.
+
+Cheap to change
+- Tuning numbers, text and content live in data files, never hard-coded in rules.
+- Each system (factions, rival, crew, cards, events, map) is a module behind a small interface,
+  switched on or off by the ruleset. Replacing one should not touch the others.
+- Keep seams, not frameworks: don't build generic machinery for features that don't exist yet.
+- Delete abandoned code; don't comment it out. Git history and tags keep it.
+
+When the direction changes (pivot)
+1. Tag the current build so it stays playable (e.g. v0.1-before-pivot).
+2. Log the change and the reason in docs/decisions.md.
+3. Update the design doc; move dropped ideas to the parking lot, never just delete them.
+4. Change on a branch; if the new direction fails, the old one is one merge away.
+
+Adding ideas later
+- New ideas are welcome. They go to the design doc's Ideas inbox, then get triaged.
+- An idea gets built once the current version is fun and the idea fits the design pillars.
+  "Not now" means parked, not rejected.
 
 ## Working agreements
 - **Owner's code level:** comfortable with scripting (PowerShell). Write plain, well-named code; a short header
