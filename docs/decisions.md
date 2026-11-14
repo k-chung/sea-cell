@@ -2,6 +2,11 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-14 — Ideas move to GitHub Issues
+The design doc's inbox was hard to find (a hidden tab on phones). Ideas now go in as GitHub Issues
+(template applies the `idea` label) and are sorted at the start of every session into accepted, parked or
+rejected (rejected only with the owner's OK). The design doc stays the sorted source of truth.
+
 ## 2026-11-14 — v0.1 build choices
 - **Saves are action logs, not state snapshots.** A save = seed + actions; loading replays it. Saves can't
   drift out of sync with the rules, and every save doubles as a bug report. Cost: if content changes,
