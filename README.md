@@ -22,10 +22,12 @@ Then open the address it prints (usually http://localhost:5173).
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Run the game with live reload |
-| `npm test` | Run the rules tests and golden replays |
+| `npm test` | Unit tests: rules and golden replays |
+| `npm run e2e` | End-to-end tests: a real browser plays the built game |
 | `npm run bot` | Balance bot: play 500 runs with a simple AI and print win rate, crisis rate, etc. (`npm run bot -- 2000` for more) |
 | `npm run golden:update` | Re-record golden replays after an *intended* rules or content change |
 | `npm run build` | Type-check and build the game into `dist/` |
+| `npm run build:single` | Build one self-contained HTML file for the hosted copy |
 
 ## Where things live
 
@@ -40,6 +42,8 @@ Then open the address it prints (usually http://localhost:5173).
 ## Debugging
 
 - Press **`** (backtick) in game for the dev panel: game state, seed, jump to any turn, force a crisis, balance sliders.
+- Open **/gallery.html** (while `npm run dev` runs) for the scene gallery: every screen at once.
+- Add **?seed=123** to the game URL to start new runs from a fixed seed (same run every time).
 - Press **N** to save a playtest note. It stores the exact moment (seed + every action), so it can be replayed.
 - A run is just a seed plus a list of actions. Any run report or note can be pasted into the dev panel to replay it exactly.
 
