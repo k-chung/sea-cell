@@ -2,6 +2,11 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-14 — Design for change is the top priority
+The owner expects frequent changes of direction, small and large. Code must stay human-debuggable and
+cheap to change: data-driven tuning, swappable system modules, no speculative frameworks, delete dead code.
+Pivots get a tag, a log entry and a doc update. New ideas are parked, not rejected.
+
 ## 2026-11-14 — Working agreements
 Branch + PR per feature; decide small, ask big; tests on core + golden replays; tagged builds with a changelog;
 minimal justified dependencies; desktop first, phone-tolerant; accessibility baseline (no color-only info,
