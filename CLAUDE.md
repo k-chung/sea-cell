@@ -69,10 +69,24 @@ Adding ideas later
 
 ## Testing
 - Unit tests on core rules; saved "golden" runs (seed + action log) must replay identically.
-- UI is tested by playing, plus the browser check above.
+- Screens get E2E smoke tests (Playwright clicks through start, launch, crisis, reward, win/lose)
+  and a scene gallery: a dev-only page that renders every screen in every state from saved
+  game states, so a person can eyeball all of them at once. Logic stays in core and is unit-tested.
 - After an INTENDED rules/content change, re-record golden replays with `npm run golden:update`.
   An unexpected golden failure is a bug (often randomness not going through the seeded RNG).
 - Balance changes: run `npm run bot` before and after and note the numbers in docs/decisions.md.
+
+## Ending a session (the owner works whenever inspiration strikes)
+- Leave `main` playable: merged or in an open PR that passes CI.
+- Update the "Status and next up" block at the top of the design doc: what's done, what's in progress,
+  the next 3 things.
+- Republish the hosted playable build if the game changed (`npm run build:single`).
+
+## Look and feel (chosen 2026-11-14)
+- Mission Control CRT: green phosphor terminal, one fixed console screen (stacked on phones).
+- Charm from small pixel sprites (crew, rockets, rival) defined as text pixel maps in content files.
+- Motion focused on flights; sound effects off by default; respect prefers-reduced-motion.
+- Show, don't tell: meters, icons and short labels over sentences and number lists.
 
 ## Tuning and feedback
 - All balance numbers live in one readable balance data file. Dev panel has live sliders with "export to file".
