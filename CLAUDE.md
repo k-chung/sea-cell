@@ -7,6 +7,9 @@ Design source of truth: the "Space Race Roguelike — Design Doc" (Claude Docs).
 - Be token-efficient: short updates, no repeated recaps, no unneeded file reads. Push back on requests
   that cost a lot for little value.
 - Whenever you incorporate an idea (from Issues or chat), say so explicitly.
+- Only narrate what's noteworthy, different, or progress. Don't announce routine steps (reading CLAUDE.md,
+  checking Issues when there's nothing new, standard checks that pass). No boilerplate.
+  (https://github.com/k-chung/sea-cell/issues/8)
 
 ## Ideas live in GitHub Issues (check FIRST, every session)
 New idea: https://github.com/k-chung/sea-cell/issues/new?template=idea.md

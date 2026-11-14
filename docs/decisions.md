@@ -2,6 +2,9 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-14 — Quieter updates ([#8](https://github.com/k-chung/sea-cell/issues/8))
+Claude narrates only noteworthy steps, differences and progress; routine steps go unmentioned. Saves tokens.
+
 ## 2026-11-14 — v0.2 build choices
 - **UI-only animation, all CSS.** Log lines reveal with staggered delays; alarm shake and result stamps are
   keyframes. No timers in game logic, so replays and tests are unaffected; reduced-motion turns it all off.
