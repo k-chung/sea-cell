@@ -22,3 +22,35 @@ Design source of truth: the "Space Race Roguelike — Design Doc" (Claude Docs).
 
 ## Scope
 Build v1 only (see docs/design-summary.md). New ideas go to the design doc's parking lot unless they make the launch crisis more tense or meaningful.
+
+## Working agreements
+- **Owner's code level:** comfortable with scripting (PowerShell). Write plain, well-named code; a short header
+  per file saying what it's for; comment WHY on anything non-obvious. No clever tricks.
+- **Workflow:** one branch + pull request per feature; `main` must always build and play. The owner merges.
+- **Autonomy:** decide small, ask big. Make implementation and minor design calls yourself (log them in
+  docs/decisions.md). Ask before anything that changes how the game plays or feels, or expands scope.
+- **Versions:** tag each playable milestone (v0.1 "cell", v0.2 ...) with a plain-English CHANGELOG.md entry.
+- **Dependencies:** core has zero. UI/tooling only well-known, maintained libraries, each justified in
+  docs/decisions.md.
+
+## Definition of done (every feature)
+1. Core tests pass and golden replays match.
+2. Run it in a real browser (Playwright): no console errors, screenshot checked.
+3. CHANGELOG.md and docs/decisions.md updated.
+4. Design doc updated (v1 checklist / decisions table reflect reality).
+
+## Testing
+- Unit tests on core rules; saved "golden" runs (seed + action log) must replay identically.
+- UI is tested by playing, plus the browser check above.
+
+## Tuning and feedback
+- All balance numbers live in one readable balance data file. Dev panel has live sliders with "export to file".
+- In-game note button/hotkey saves a feedback note with seed, turn, action log and state attached,
+  exportable as a report Claude can replay.
+
+## Devices and accessibility (baseline from day one)
+- Desktop first (mouse/keyboard); layout must not break on a phone.
+- Never color-only information: odds, status, factions always also have text or icons.
+- Every action is keyboard-reachable.
+- Text scales; the CRT look gets a "clean" toggle.
+- Respect prefers-reduced-motion for animation and flicker.
