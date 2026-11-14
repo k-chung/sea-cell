@@ -2,6 +2,26 @@
 
 Design source of truth: the "Space Race Roguelike — Design Doc" (Claude Docs). Snapshot: docs/design-summary.md.
 
+## Ideas live in GitHub Issues (check FIRST, every session)
+New idea: https://github.com/k-chung/sea-cell/issues/new?template=idea.md
+Open ideas: https://github.com/k-chung/sea-cell/issues?q=is%3Aissue+is%3Aopen+label%3Aidea
+
+1. At the START of every session, before anything else, list open issues labeled `idea`
+   (`gh api "repos/k-chung/sea-cell/issues?labels=idea&state=open"`) and say in one line how many are new.
+   If issues can't be listed (no GitHub access in this session), say so; never assume there are none.
+2. Sort each idea against the design pillars and the scope test ("does it make the launch crisis
+   more tense or meaningful?"). A braindump with several thoughts: split it in your comment and sort each.
+   - accepted -> add it to the design doc (Decisions, Scope "Next", or Open questions), relabel
+     `idea: accepted`, comment where it went, close it.
+   - parked -> add it to the design doc's Parking lot, relabel `idea: parked`, close it.
+   - unclear, or it changes how the game plays or feels -> ask the owner before deciding; leave it open.
+   - rejected -> only with the owner's OK; relabel `idea: rejected`, comment a one-line reason, close it.
+3. The owner's ideas outrank Claude's own suggestions. If an idea conflicts with an earlier decision,
+   flag the conflict and ask; never silently pick one.
+4. Never edit or delete the text of the owner's issues: only comment, label and close.
+5. Log any decision an idea causes in docs/decisions.md, with the issue link.
+6. Playtest notes (N key) and run reports pasted into issues can be replayed via the dev panel.
+
 ## Architecture rules (do not break)
 - Three layers, one direction: content -> core -> ui.
   - src/content/: plain data (parts, events, traits, factions, doctrines, milestones), validated on load. No logic.
@@ -21,7 +41,7 @@ Design source of truth: the "Space Race Roguelike — Design Doc" (Claude Docs).
 - Core rules get unit tests; the balance bot runs on core only.
 
 ## Scope
-Build the current version's scope only (see docs/design-summary.md). New ideas go to the Ideas inbox and are triaged (see "Adding ideas later").
+Build the current version's scope only (see docs/design-summary.md). New ideas arrive as GitHub Issues and are sorted (see "Ideas live in GitHub Issues").
 
 ## Design for change (top priority)
 The owner expects to say "this direction sucks" and change things, from small details to big systems.
@@ -47,7 +67,7 @@ When the direction changes (pivot)
 4. Change on a branch; if the new direction fails, the old one is one merge away.
 
 Adding ideas later
-- New ideas are welcome. They go to the design doc's Ideas inbox, then get triaged.
+- New ideas are welcome. They arrive as GitHub Issues labeled `idea`, then get sorted.
 - An idea gets built once the current version is fun and the idea fits the design pillars.
   "Not now" means parked, not rejected.
 
@@ -79,7 +99,7 @@ Adding ideas later
 ## Ending a session (the owner works whenever inspiration strikes)
 - Leave `main` playable: merged or in an open PR that passes CI.
 - Update the "Status and next up" block at the top of the design doc: what's done, what's in progress,
-  the next 3 things.
+  the next 3 things, "Ideas sorted this session: N", and links to ideas still waiting on the owner.
 - Republish the hosted playable build if the game changed (`npm run build:single`).
 
 ## Look and feel (chosen 2026-11-14)
