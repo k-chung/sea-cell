@@ -1,0 +1,22 @@
+{
+  "name": "sea-cell",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "bot": "node tools/balance-bot.ts",
+    "golden:update": "node tools/update-golden.ts",
+    "build:single": "npm run build && node tools/build-single-file.ts"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "typescript": "5.9.3",
+    "vite": "7.3.7",
+    "vitest": "3.2.7"
+  }
+}

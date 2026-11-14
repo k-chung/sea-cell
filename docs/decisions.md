@@ -2,6 +2,25 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-14 — v0.1 build choices
+- **Saves are action logs, not state snapshots.** A save = seed + actions; loading replays it. Saves can't
+  drift out of sync with the rules, and every save doubles as a bug report. Cost: if content changes,
+  an old save may not replay (the game says so and starts fresh).
+- **One crisis per mission, and it decides the mission.** The first failed phase triggers a major crisis;
+  later phases aren't rolled. With no failure, a minor anomaly can still happen. Keeps the crisis the drama.
+- **Crisis rate tuned to ~70%** via `minorCrisisChance: 0.7` (balance bot: 70.8% of missions).
+- **Simple bot wins ~15%.** It plays safe and never plans ahead, so a person should do better. FTL-hard
+  default; revisit after real playtests.
+- **Blue options are hidden unless unlocked** (like FTL). Options whose best case still ends the mission
+  are labeled, so "100%" on an abort isn't misleading.
+- **Content as TypeScript data files, not JSON**: comments allowed, typos caught by the type checker,
+  plus a validator that names the file, entry and field.
+- **Dependencies:** dev-only `vite` (dev server and build), `vitest` (tests), `typescript`, `@types/node`.
+  No runtime dependencies. Tools run with Node's built-in TypeScript support (no extra runner).
+- **Rendering:** the whole screen re-renders from state after each action using HTML strings. Simple to
+  follow and fast enough for a card game; can be swapped for a framework later without touching core.
+- **Playtest notes use an in-page box** (not browser pop-ups), so they work when the game is hosted.
+
 ## 2026-11-14 — Design for change is the top priority
 The owner expects frequent changes of direction, small and large. Code must stay human-debuggable and
 cheap to change: data-driven tuning, swappable system modules, no speculative frameworks, delete dead code.

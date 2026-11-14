@@ -70,6 +70,9 @@ Adding ideas later
 ## Testing
 - Unit tests on core rules; saved "golden" runs (seed + action log) must replay identically.
 - UI is tested by playing, plus the browser check above.
+- After an INTENDED rules/content change, re-record golden replays with `npm run golden:update`.
+  An unexpected golden failure is a bug (often randomness not going through the seeded RNG).
+- Balance changes: run `npm run bot` before and after and note the numbers in docs/decisions.md.
 
 ## Tuning and feedback
 - All balance numbers live in one readable balance data file. Dev panel has live sliders with "export to file".
