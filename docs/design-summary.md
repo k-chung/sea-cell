@@ -9,7 +9,7 @@ Source of truth: the "Space Race Roguelike — Design Doc" in Claude Docs. This 
 4. Readable at a glance.
 5. Focus first, expand later (content as data).
 
-## v1 scope
+## v1 scope (built in v0.1 "cell")
 - 6-month turns, 1957–1970, max 1 mission per turn: Budget, Plan, Build, Fly, News
 - Milestones: satellite, crewed orbit, spacewalk, docking, lunar flyby, landing
 - ~12 part cards; hand of 5; 3 slots (Booster / Upper / Payload); 2–3 synergies
