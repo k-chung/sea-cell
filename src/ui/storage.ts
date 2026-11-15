@@ -36,7 +36,11 @@ export interface SavedRun {
 export const loadSave = () => read<SavedRun | null>('save', null);
 export const writeSave = (save: SavedRun) => write('save', save);
 export const clearSave = () => {
-  try { localStorage.removeItem(PREFIX + 'save'); } catch { /* ignore */ }
+  try {
+    localStorage.removeItem(`${PREFIX}save`);
+  } catch {
+    /* ignore */
+  }
 };
 
 export interface HallEntry {
@@ -49,8 +53,15 @@ export interface HallEntry {
   seed: number;
   storyMode: boolean;
 }
-export interface Fallen { name: string; mission: string; date: string }
-export interface Hall { runs: HallEntry[]; fallen: Fallen[] }
+export interface Fallen {
+  name: string;
+  mission: string;
+  date: string;
+}
+export interface Hall {
+  runs: HallEntry[];
+  fallen: Fallen[];
+}
 
 export const loadHall = () => read<Hall>('hall', { runs: [], fallen: [] });
 export function addToHall(entry: HallEntry, fallen: Fallen[]): void {

@@ -2,8 +2,8 @@
 // You only see fuzzy intelligence about what it's working on; its firsts are always announced.
 
 import type { Ruleset } from '../content/types.ts';
+import { type RngState, random, rollPercent } from './rng.ts';
 import type { GameState } from './state.ts';
-import { random, rollPercent, type RngState } from './rng.ts';
 
 function nextRivalMilestone(s: GameState, r: Ruleset) {
   return r.content.milestones.find((m) => s.rival.milestones[m.id] === undefined) ?? null;
@@ -23,7 +23,9 @@ export function advanceRival(s: GameState, r: Ruleset): string[] {
     if (s.milestones[next.id] === undefined) {
       s.public += b.rivalShockPublic;
       s.congress += b.rivalShockCongress;
-      lines.push(`SOVIET FIRST: ${next.name}. The public is shaken (${b.rivalShockPublic} public); Congress opens its wallet (+${b.rivalShockCongress} Congress).`);
+      lines.push(
+        `SOVIET FIRST: ${next.name}. The public is shaken (${b.rivalShockPublic} public); Congress opens its wallet (+${b.rivalShockCongress} Congress).`,
+      );
     } else {
       lines.push(`The Soviets have matched you: ${next.name}.`);
     }

@@ -1,14 +1,21 @@
 // Tests for the rules engine. Run: npm test
 
-import { describe, expect, it } from 'vitest';
 import { readdirSync, readFileSync } from 'node:fs';
-import { cellRuleset as r } from '../src/content/rulesets.ts';
+import { describe, expect, it } from 'vitest';
+import { spaceRaceRuleset as r } from '../src/content/rulesets.ts';
 import {
-  createGame, previewLaunch, replay, step, validateContent, type Action, type GameState, type RunRecord,
+  type Action,
+  createGame,
+  type GameState,
+  previewLaunch,
+  type RunRecord,
+  replay,
+  step,
+  validateContent,
 } from '../src/core/index.ts';
 import { createRng, random } from '../src/core/rng.ts';
-import { playBotRun } from '../tools/play.ts';
 import { summarize } from '../tools/golden.ts';
+import { playBotRun } from '../tools/play.ts';
 
 const newGame = (seed = 1, storyMode = false) => createGame(r, seed, { storyMode });
 
@@ -19,14 +26,16 @@ describe('content', () => {
 
   it('reports bad references with file and entry', () => {
     const broken = structuredClone(r);
-    broken.content.missions[0]!.milestone = 'nope';
+    const first = broken.content.missions[0];
+    if (first) first.milestone = 'nope';
     expect(validateContent(broken).join('\n')).toContain('missions.ts "satellite": milestone "nope" does not exist');
   });
 });
 
 describe('random numbers', () => {
   it('same seed gives the same sequence', () => {
-    const a = createRng(42), b = createRng(42);
+    const a = createRng(42),
+      b = createRng(42);
     expect([random(a), random(a), random(a)]).toEqual([random(b), random(b), random(b)]);
   });
 });
@@ -71,7 +80,10 @@ describe('launch preview', () => {
   it('explains why a rocket cannot fly', () => {
     const s: GameState = { ...newGame(), hand: ['javelin', 'agile', 'pilgrim'] };
     const preview = previewLaunch(s, r, {
-      missionId: 'crewedOrbit', crewIds: [], testFlight: false, redundancy: false,
+      missionId: 'crewedOrbit',
+      crewIds: [],
+      testFlight: false,
+      redundancy: false,
       rocket: { booster: 'javelin', upper: 'agile', payload: 'pilgrim' },
     });
     expect(preview.problems).toContain('Not enough lift: 3 of 4');
@@ -82,7 +94,11 @@ describe('launch preview', () => {
     let s: GameState = { ...newGame(), hand: ['javelin', 'agile', 'beacon'] };
     s = step(s, r, { type: 'dev', command: 'forceEvent', eventId: 'satSpin' });
     s = step(s, r, {
-      type: 'launch', missionId: 'satellite', crewIds: [], testFlight: false, redundancy: false,
+      type: 'launch',
+      missionId: 'satellite',
+      crewIds: [],
+      testFlight: false,
+      redundancy: false,
       rocket: { booster: 'javelin', upper: 'agile', payload: 'beacon' },
     });
     expect(s.phase).toBe('crisis');
@@ -108,7 +124,10 @@ describe('golden replays (if this fails after an intended change: npm run golden
   const dir = new URL('./golden/', import.meta.url);
   for (const file of readdirSync(dir).filter((f) => f.endsWith('.json'))) {
     it(file, () => {
-      const g = JSON.parse(readFileSync(new URL(file, dir), 'utf8')) as RunRecord & { expected: unknown; actions: Action[] };
+      const g = JSON.parse(readFileSync(new URL(file, dir), 'utf8')) as RunRecord & {
+        expected: unknown;
+        actions: Action[];
+      };
       expect(summarize(replay(r, g))).toEqual(g.expected);
     });
   }

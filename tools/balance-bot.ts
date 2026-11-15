@@ -3,13 +3,16 @@
 //        npm run bot -- 2000    (2000 runs)
 // Compare the numbers before and after a balance change. The bot is a yardstick, not a good player.
 
-import { cellRuleset } from '../src/content/rulesets.ts';
+import { spaceRaceRuleset } from '../src/content/rulesets.ts';
 import { playBotRun } from './play.ts';
 
 const runs = Number(process.argv[2] ?? 500);
-const r = cellRuleset;
+const r = spaceRaceRuleset;
 
-let wins = 0, launches = 0, crises = 0, deaths = 0;
+let wins = 0,
+  launches = 0,
+  crises = 0,
+  deaths = 0;
 const winTurns: number[] = [];
 const lossReasons: Record<string, number> = {};
 const reached: Record<string, number> = {};
@@ -42,8 +45,11 @@ console.log(`Launches per run:      ${(launches / runs).toFixed(1)}`);
 console.log(`Missions with crisis:  ${launches ? ((100 * crises) / launches).toFixed(1) : 0}%  (target ~70%)`);
 console.log(`Astronaut deaths/run:  ${(deaths / runs).toFixed(2)}`);
 console.log('\nLoss reasons:');
-for (const [reason, n] of Object.entries(lossReasons).sort((a, b) => b[1] - a[1])) console.log(`  ${pct(n).padStart(6)}  ${reason}`);
+for (const [reason, n] of Object.entries(lossReasons).sort((a, b) => b[1] - a[1]))
+  console.log(`  ${pct(n).padStart(6)}  ${reason}`);
 console.log('\nMilestone reached by:   you     rival');
 for (const m of r.content.milestones) {
-  console.log(`  ${m.name.padEnd(36)} ${pct(reached[m.id] ?? 0).padStart(6)}  ${pct(rivalReached[m.id] ?? 0).padStart(6)}`);
+  console.log(
+    `  ${m.name.padEnd(36)} ${pct(reached[m.id] ?? 0).padStart(6)}  ${pct(rivalReached[m.id] ?? 0).padStart(6)}`,
+  );
 }

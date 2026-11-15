@@ -2,6 +2,21 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-15 — Pivot: card-based planning + flight loop (Module 0 groundwork)
+Owner direction: inspiration narrowed to Slay the Spire/FTL (random cards for managerial choices, parts,
+staff, astronauts) and The Last Stand/XCOM (planning phase, then a "combat" phase = the flight). Art must be
+timeless across eras (refs: FTL, Dungeon of the Endless, Game Dev Tycoon); style decided in Module 3.
+Replaces the CRT look decision (2026-11-14). v0.2 stays playable (hosted link; owner to tag).
+Plan: Module 1 cards + planning phase (Preact UI), Module 2 phase-by-phase flights, Module 3 art.
+Era framework (campaign select/unlocks) deferred until a second era exists.
+- **Eras as content folders** (`src/content/eras/<era>/`): an era is a content pack; no per-item era field
+  needed. Ruleset id renamed `cell` -> `space-race` (old saves won't load; goldens re-recorded).
+- **Art layer** (`src/ui/art.ts`): screens ask for art by name, so pixel vs vector is a swap.
+- **Biome 2.6.4** (dev-only): one tool for lint + format, runs in CI. Content data files are exempt from
+  formatting (one-entry-per-line formatting doubled their size). CSS not linted (replaced in Module 1).
+- **Slim CLAUDE.md** (~45 lines) with details in docs/workflow.md, docs/engineering.md,
+  docs/ARCHITECTURE.md: fewer tokens loaded every session.
+
 ## 2026-11-14 — Quieter updates ([#8](https://github.com/k-chung/sea-cell/issues/8))
 Claude narrates only noteworthy steps, differences and progress; routine steps go unmentioned. Saves tokens.
 

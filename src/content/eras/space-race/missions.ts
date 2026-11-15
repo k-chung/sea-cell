@@ -2,7 +2,7 @@
 // The rival works through milestones in the order listed here.
 // Phases: launch -> booster, orbit/rendezvous/transfer -> upper stage, eva/landing/reentry -> payload.
 
-import type { MilestoneDef, MissionDef } from './types.ts';
+import type { MilestoneDef, MissionDef } from '../../types.ts';
 
 export const milestones: MilestoneDef[] = [
   { id: 'satellite', name: 'First satellite', rivalEffort: 1.5 },

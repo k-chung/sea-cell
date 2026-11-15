@@ -2,9 +2,9 @@
 // Blue options (with a requirement) are hidden unless you qualify, like FTL.
 
 import type { EventDef, EventOption, FlightPhase, MissionResult, Requirement, Ruleset } from '../content/types.ts';
-import type { FlightState, GameState } from './state.ts';
 import { getAstronaut, getFavor, getPart, getPersonnel, getTrait, personnelBonus } from './lookup.ts';
 import { pick, type RngState } from './rng.ts';
+import type { FlightState, GameState } from './state.ts';
 
 export interface OptionView {
   /** Index into the event's options list (what chooseOption expects). */
@@ -19,7 +19,11 @@ export interface OptionView {
 }
 
 export function pickCrisisEvent(
-  r: Ruleset, rng: RngState, phase: FlightPhase, severity: 'major' | 'minor', crewed: boolean,
+  r: Ruleset,
+  rng: RngState,
+  phase: FlightPhase,
+  severity: 'major' | 'minor',
+  crewed: boolean,
 ): EventDef | null {
   const fits = (e: EventDef) => e.severity === severity && (e.crewed === 'any' || e.crewed === crewed);
   const exact = r.content.events.filter((e) => fits(e) && e.phases !== 'any' && e.phases.includes(phase));
@@ -31,8 +35,9 @@ export function pickCrisisEvent(
 export function requirementMet(s: GameState, r: Ruleset, flight: FlightState, req: Requirement): boolean {
   if ('trait' in req) return flight.crewIds.some((id) => getAstronaut(s, id).traitId === req.trait);
   if ('fuel' in req) {
-    return [flight.rocket.booster, flight.rocket.upper, flight.rocket.payload]
-      .some((id) => getPart(r, id).fuel === req.fuel);
+    return [flight.rocket.booster, flight.rocket.upper, flight.rocket.payload].some(
+      (id) => getPart(r, id).fuel === req.fuel,
+    );
   }
   if ('personnel' in req) return s.personnel.includes(req.personnel);
   return s.favors.includes(req.favor);

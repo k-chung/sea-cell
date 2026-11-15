@@ -8,11 +8,23 @@
 
 import type { Ruleset } from '../content/types.ts';
 import {
-  crisisOptions, dateLabel, fillText, income, lookup, missionStatus, partReliability, previewLaunch,
-  programOptions, rewardLabel, testFlightCost, type GameState, type LaunchPlan, type RocketChoice,
+  crisisOptions,
+  dateLabel,
+  fillText,
+  type GameState,
+  income,
+  type LaunchPlan,
+  lookup,
+  missionStatus,
+  partReliability,
+  previewLaunch,
+  programOptions,
+  type RocketChoice,
+  rewardLabel,
+  testFlightCost,
 } from '../core/index.ts';
 import { button, esc } from './html.ts';
-import { face, rivalIcon, rocketRows, sprite, titleRocket } from './sprites.ts';
+import { face, rivalIcon, rocketRows, sprite, titleRocket } from './art.ts';
 import { loadHall } from './storage.ts';
 
 /** What the player has picked on the plan screen but not launched yet (UI-only). */
@@ -27,7 +39,13 @@ export interface Draft {
 }
 
 export const emptyDraft = (): Draft => ({
-  missionId: null, booster: null, upper: null, payload: null, crewIds: [], testFlight: false, redundancy: false,
+  missionId: null,
+  booster: null,
+  upper: null,
+  payload: null,
+  crewIds: [],
+  testFlight: false,
+  redundancy: false,
 });
 
 export interface View {
@@ -48,7 +66,9 @@ export function draftPlan(d: Draft): LaunchPlan | null {
   return {
     missionId: d.missionId,
     rocket: { booster: d.booster, upper: d.upper, payload: d.payload },
-    crewIds: d.crewIds, testFlight: d.testFlight, redundancy: d.redundancy,
+    crewIds: d.crewIds,
+    testFlight: d.testFlight,
+    redundancy: d.redundancy,
   };
 }
 
@@ -74,11 +94,15 @@ export function renderApp(v: View): string {
   if (!v.state) return `<div class="console title-screen">${error}${titleScreen(v)}</div>`;
   const s = v.state;
   const main =
-    s.phase === 'plan' ? planScreen(v, s)
-    : s.phase === 'crisis' ? crisisScreen(v, s)
-    : s.phase === 'reward' ? rewardScreen(v, s)
-    : s.phase === 'report' ? reportScreen(s)
-    : overScreen(v, s);
+    s.phase === 'plan'
+      ? planScreen(v, s)
+      : s.phase === 'crisis'
+        ? crisisScreen(v, s)
+        : s.phase === 'reward'
+          ? rewardScreen(v, s)
+          : s.phase === 'report'
+            ? reportScreen(s)
+            : overScreen(v, s);
   return `
   <div class="console phase-${s.phase}">
     ${statusBar(v, s)}
@@ -130,9 +154,12 @@ function vehiclePanel(v: View, s: GameState): string {
   const r = v.ruleset;
   const part = (id: string | null) => (id ? lookup.getPart(r, id) : null);
   const flying = s.phase === 'crisis' || s.phase === 'report';
-  const rocket = s.phase === 'plan'
-    ? { booster: v.draft.booster, upper: v.draft.upper, payload: v.draft.payload }
-    : flying ? (s.flight?.rocket ?? (s.launchedThisTurn ? v.lastRocket : null)) : null;
+  const rocket =
+    s.phase === 'plan'
+      ? { booster: v.draft.booster, upper: v.draft.upper, payload: v.draft.payload }
+      : flying
+        ? (s.flight?.rocket ?? (s.launchedThisTurn ? v.lastRocket : null))
+        : null;
 
   let art = '<p class="dim">NO VEHICLE ON PAD</p>';
   if (rocket && (rocket.booster || rocket.upper || rocket.payload)) {
@@ -145,8 +172,12 @@ function vehiclePanel(v: View, s: GameState): string {
   const plan = draftPlan(v.draft);
   if (s.phase === 'plan' && plan) {
     const p = previewLaunch(s, r, plan);
-    phases = `<ul class="phases">${p.phases.map((x) =>
-      `<li><span>${esc(x.phase.toUpperCase())}</span><span>${bar(x.reliability, 100, 8)} ${x.reliability}%</span></li>`).join('')}</ul>`;
+    phases = `<ul class="phases">${p.phases
+      .map(
+        (x) =>
+          `<li><span>${esc(x.phase.toUpperCase())}</span><span>${bar(x.reliability, 100, 8)} ${x.reliability}%</span></li>`,
+      )
+      .join('')}</ul>`;
   }
   return `<h2>VEHICLE</h2><div class="pad">${art}</div>${phases}`;
 }
@@ -155,27 +186,38 @@ function vehiclePanel(v: View, s: GameState): string {
 
 function sidePanel(v: View, s: GameState): string {
   const r = v.ruleset;
-  const ladder = r.content.milestones.map((m) => {
-    const you = s.milestones[m.id] !== undefined;
-    const them = s.rival.milestones[m.id] !== undefined;
-    return `<li><span class="${you ? 'got' : 'dim'}" title="You">${you ? '■' : '□'}</span><span class="${them ? 'red' : 'dim'}" title="USSR">${them ? '■' : '□'}</span> ${esc(short(m.name))}</li>`;
-  }).join('');
+  const ladder = r.content.milestones
+    .map((m) => {
+      const you = s.milestones[m.id] !== undefined;
+      const them = s.rival.milestones[m.id] !== undefined;
+      return `<li><span class="${you ? 'got' : 'dim'}" title="You">${you ? '■' : '□'}</span><span class="${them ? 'red' : 'dim'}" title="USSR">${them ? '■' : '□'}</span> ${esc(short(m.name))}</li>`;
+    })
+    .join('');
   const intel = s.rival.intelTarget
     ? `${esc(short(lookup.getMilestone(r, s.rival.intelTarget).name))} · ${esc((s.rival.intelStage ?? '').toUpperCase())}`
     : 'NO ACTIVITY';
 
-  const crew = s.crew.map((a) => {
-    const trait = lookup.getTrait(r, a.traitId);
-    const status = a.status === 'dead' ? 'KIA' : a.status === 'injured' ? `INJURED ${a.injuredTurns}T` : `${a.flights} FLT`;
-    return `<li class="${a.status}" title="${esc(trait.description)}">${face(a.id, a.name, 3, a.status === 'dead')}
+  const crew = s.crew
+    .map((a) => {
+      const trait = lookup.getTrait(r, a.traitId);
+      const status =
+        a.status === 'dead' ? 'KIA' : a.status === 'injured' ? `INJURED ${a.injuredTurns}T` : `${a.flights} FLT`;
+      return `<li class="${a.status}" title="${esc(trait.description)}">${face(a.id, a.name, 3, a.status === 'dead')}
       <span>${esc(a.name.toUpperCase())}<br><small>${esc(trait.name.toUpperCase())} · ${status}</small></span></li>`;
-  }).join('');
+    })
+    .join('');
 
   const staff = [
-    ...s.personnel.map((id) => lookup.getPersonnel(r, id)).map((p) => `<li title="${esc(p.description)}">${esc(p.name.toUpperCase())}</li>`),
+    ...s.personnel
+      .map((id) => lookup.getPersonnel(r, id))
+      .map((p) => `<li title="${esc(p.description)}">${esc(p.name.toUpperCase())}</li>`),
     ...s.favors.map((id) => `<li>${esc(lookup.getFavor(r, id).name.toUpperCase())}</li>`),
   ].join('');
-  const history = [...s.history].reverse().slice(0, 40).map((l) => `<li>${esc(l)}</li>`).join('');
+  const history = [...s.history]
+    .reverse()
+    .slice(0, 40)
+    .map((l) => `<li>${esc(l)}</li>`)
+    .join('');
 
   return `
     <h2>RACE <small>YOU / USSR</small> ${rivalIcon(3)}</h2>
@@ -190,11 +232,21 @@ function sidePanel(v: View, s: GameState): string {
 
 function titleScreen(v: View): string {
   const hall = loadHall();
-  const runs = hall.runs.slice(0, 6).map((h) =>
-    `<li>${h.won ? 'WON ' : 'LOST'} · ${esc(h.date.toUpperCase())} · PRESTIGE ${h.prestige}${h.storyMode ? ' · STORY' : ''}</li>`).join('')
-    || '<li class="dim">NO RUNS ON FILE</li>';
-  const fallen = hall.fallen.slice(0, 12).map((f) => `<li>${esc(f.name.toUpperCase())} · ${esc(f.mission.toUpperCase())} · ${esc(f.date.toUpperCase())}</li>`).join('')
-    || '<li class="dim">NO ONE. YET.</li>';
+  const runs =
+    hall.runs
+      .slice(0, 6)
+      .map(
+        (h) =>
+          `<li>${h.won ? 'WON ' : 'LOST'} · ${esc(h.date.toUpperCase())} · PRESTIGE ${h.prestige}${h.storyMode ? ' · STORY' : ''}</li>`,
+      )
+      .join('') || '<li class="dim">NO RUNS ON FILE</li>';
+  const fallen =
+    hall.fallen
+      .slice(0, 12)
+      .map(
+        (f) => `<li>${esc(f.name.toUpperCase())} · ${esc(f.mission.toUpperCase())} · ${esc(f.date.toUpperCase())}</li>`,
+      )
+      .join('') || '<li class="dim">NO ONE. YET.</li>';
   return `
   <main class="title-card">
     <div class="rocket liftoff">${titleRocket(6)}</div>
@@ -224,24 +276,40 @@ function titleScreen(v: View): string {
 function planScreen(v: View, s: GameState): string {
   const r = v.ruleset;
   const d = v.draft;
-  const missions = r.content.missions.map((m) => {
-    const st = missionStatus(s, r, m);
-    const tag = st.status === 'done' ? 'DONE' : st.status === 'available' ? 'READY' : 'LOCKED';
-    const first = s.rival.milestones[m.milestone] !== undefined && st.status !== 'done' ? ' <span class="red">USSR 1ST</span>' : '';
-    const crew = m.crewNeeded ? `CREW ${m.crewNeeded}` : 'AUTO';
-    const tip = st.status === 'locked' ? `Needs: ${st.missing.join(', ')}` : m.description;
-    return button({
-      act: 'mission', arg: m.id, cls: `row mission ${st.status}`, pressed: d.missionId === m.id,
-      disabled: st.status === 'locked', title: tip,
-      label: `<span class="grow">${esc(m.name.toUpperCase())}${first}</span><span>LIFT ${m.liftNeeded}</span><span>${crew}</span><span class="tag">${tag}</span>`,
-    });
-  }).join('');
+  const missions = r.content.missions
+    .map((m) => {
+      const st = missionStatus(s, r, m);
+      const tag = st.status === 'done' ? 'DONE' : st.status === 'available' ? 'READY' : 'LOCKED';
+      const first =
+        s.rival.milestones[m.milestone] !== undefined && st.status !== 'done'
+          ? ' <span class="red">USSR 1ST</span>'
+          : '';
+      const crew = m.crewNeeded ? `CREW ${m.crewNeeded}` : 'AUTO';
+      const tip = st.status === 'locked' ? `Needs: ${st.missing.join(', ')}` : m.description;
+      return button({
+        act: 'mission',
+        arg: m.id,
+        cls: `row mission ${st.status}`,
+        pressed: d.missionId === m.id,
+        disabled: st.status === 'locked',
+        title: tip,
+        label: `<span class="grow">${esc(m.name.toUpperCase())}${first}</span><span>LIFT ${m.liftNeeded}</span><span>${crew}</span><span class="tag">${tag}</span>`,
+      });
+    })
+    .join('');
 
-  const programs = programOptions(s, r).map((p) => button({
-    act: 'program', arg: p.program, cls: 'chip', disabled: !!p.blockedReason,
-    title: p.blockedReason ?? p.detail,
-    label: `${esc(p.label.toUpperCase())}${p.cost ? ` $${p.cost}` : ''}`,
-  })).join('');
+  const programs = programOptions(s, r)
+    .map((p) =>
+      button({
+        act: 'program',
+        arg: p.program,
+        cls: 'chip',
+        disabled: !!p.blockedReason,
+        title: p.blockedReason ?? p.detail,
+        label: `${esc(p.label.toUpperCase())}${p.cost ? ` $${p.cost}` : ''}`,
+      }),
+    )
+    .join('');
 
   return `
     <h2>MISSIONS</h2>
@@ -255,39 +323,61 @@ function builder(v: View, s: GameState, missionId: string): string {
   const d = v.draft;
   const mission = lookup.getMission(r, missionId);
 
-  const cards = (slot: 'booster' | 'upper' | 'payload') => s.hand
-    .map((id) => lookup.getPart(r, id)).filter((p) => p.slot === slot)
-    .map((p) => {
-      const stat = p.slot === 'payload'
-        ? (p.crewSeats ? `${p.crewSeats} SEAT` : (p.payloadKind ?? '').toUpperCase())
-        : `LIFT ${p.lift}`;
-      return button({
-        act: 'part', arg: `${slot}|${p.id}`, cls: 'card', pressed: d[slot] === p.id, title: p.description,
-        label: `<b>${esc(p.name.toUpperCase())}</b><span>${stat} · ${partReliability(s, r, p.id)}% · $${p.cost} · ${FUEL[p.fuel]}</span>`,
-      });
-    }).join('') || '<span class="dim">NONE IN HAND</span>';
+  const cards = (slot: 'booster' | 'upper' | 'payload') =>
+    s.hand
+      .map((id) => lookup.getPart(r, id))
+      .filter((p) => p.slot === slot)
+      .map((p) => {
+        const stat =
+          p.slot === 'payload'
+            ? p.crewSeats
+              ? `${p.crewSeats} SEAT`
+              : (p.payloadKind ?? '').toUpperCase()
+            : `LIFT ${p.lift}`;
+        return button({
+          act: 'part',
+          arg: `${slot}|${p.id}`,
+          cls: 'card',
+          pressed: d[slot] === p.id,
+          title: p.description,
+          label: `<b>${esc(p.name.toUpperCase())}</b><span>${stat} · ${partReliability(s, r, p.id)}% · $${p.cost} · ${FUEL[p.fuel]}</span>`,
+        });
+      })
+      .join('') || '<span class="dim">NONE IN HAND</span>';
 
-  const crew = mission.crewNeeded === 0 ? '' : `
+  const crew =
+    mission.crewNeeded === 0
+      ? ''
+      : `
     <div class="slot"><span class="slot-name">CREW ${d.crewIds.length}/${mission.crewNeeded}</span><div class="cards">
-    ${s.crew.filter((a) => a.status !== 'dead').map((a) => {
-      const pos = d.crewIds.indexOf(a.id);
-      return button({
-        act: 'crew', arg: a.id, cls: 'card crew-card', pressed: pos >= 0, disabled: a.status !== 'ready',
-        title: `${a.name}: ${lookup.getTrait(r, a.traitId).description}`,
-        label: `${face(a.id, a.name, 2)}<span>${pos === 0 ? 'CDR ' : ''}${esc((a.name.split(' ').pop() ?? '').toUpperCase())}</span>`,
-      });
-    }).join('')}</div></div>`;
+    ${s.crew
+      .filter((a) => a.status !== 'dead')
+      .map((a) => {
+        const pos = d.crewIds.indexOf(a.id);
+        return button({
+          act: 'crew',
+          arg: a.id,
+          cls: 'card crew-card',
+          pressed: pos >= 0,
+          disabled: a.status !== 'ready',
+          title: `${a.name}: ${lookup.getTrait(r, a.traitId).description}`,
+          label: `${face(a.id, a.name, 2)}<span>${pos === 0 ? 'CDR ' : ''}${esc((a.name.split(' ').pop() ?? '').toUpperCase())}</span>`,
+        });
+      })
+      .join('')}</div></div>`;
 
   const plan = draftPlan(d);
   const p = plan ? previewLaunch(s, r, plan) : null;
   const clean = p ? Math.round(p.phases.reduce((acc, x) => acc * (x.reliability / 100), 1) * 100) : 0;
-  const readout = p ? `
+  const readout = p
+    ? `
     <div class="readout">
       <span>LIFT ${p.lift}/${p.liftNeeded}</span><span>COST $${p.cost}/${s.budget}</span>
       <span>CLEAN FLIGHT ${clean}%</span>
       ${p.synergies.map((x) => `<span class="good" title="${esc(x)}">+SYNERGY</span>`).join('')}
     </div>
-    ${p.problems.length ? `<ul class="problems">${p.problems.map((x) => `<li>! ${esc(x.toUpperCase())}</li>`).join('')}</ul>` : ''}` : '';
+    ${p.problems.length ? `<ul class="problems">${p.problems.map((x) => `<li>! ${esc(x.toUpperCase())}</li>`).join('')}</ul>` : ''}`
+    : '';
 
   return `
     <h2>BUILD: ${esc(mission.name.toUpperCase())}</h2>
@@ -315,10 +405,16 @@ function crisisScreen(v: View, s: GameState): string {
   const n = flight.lines.length;
   const leadId = flight.crewIds[0];
   const lead = leadId ? lookup.getAstronaut(s, leadId) : null;
-  const options = crisisOptions(s, r, event).map((o, i) => button({
-    act: 'option', arg: o.index, cls: `option${o.unlockedBy ? ' blue' : ''}`,
-    label: `<span>[${i + 1}]</span><span class="grow">${o.unlockedBy ? `★ ${esc(o.unlockedBy.toUpperCase())}: ` : ''}${esc(o.text.toUpperCase())}<small>${BEST_CASE[o.bestCase]}</small></span><span>${o.odds}%</span>`,
-  })).join('');
+  const options = crisisOptions(s, r, event)
+    .map((o, i) =>
+      button({
+        act: 'option',
+        arg: o.index,
+        cls: `option${o.unlockedBy ? ' blue' : ''}`,
+        label: `<span>[${i + 1}]</span><span class="grow">${o.unlockedBy ? `★ ${esc(o.unlockedBy.toUpperCase())}: ` : ''}${esc(o.text.toUpperCase())}<small>${BEST_CASE[o.bestCase]}</small></span><span>${o.odds}%</span>`,
+      }),
+    )
+    .join('');
   return `
     ${revealList(flight.lines)}
     <section class="alarm" style="--i:${n}">
@@ -337,17 +433,27 @@ function crisisScreen(v: View, s: GameState): string {
 function rewardScreen(v: View, s: GameState): string {
   const r = v.ruleset;
   const title = s.rewardSource === 'research' ? 'RESEARCH: PICK A PART TO UNLOCK' : 'A FIRST! PICK A REWARD';
-  const choices = s.rewardChoices.map((c, i) => {
-    const l = rewardLabel(r, c);
-    return button({ act: 'reward', arg: i, cls: 'option', label: `<span>[${i + 1}]</span><span class="grow"><b>${esc(l.title.toUpperCase())}</b><small> ${esc(l.detail)}</small></span>` });
-  }).join('');
+  const choices = s.rewardChoices
+    .map((c, i) => {
+      const l = rewardLabel(r, c);
+      return button({
+        act: 'reward',
+        arg: i,
+        cls: 'option',
+        label: `<span>[${i + 1}]</span><span class="grow"><b>${esc(l.title.toUpperCase())}</b><small> ${esc(l.detail)}</small></span>`,
+      });
+    })
+    .join('');
   return `<h2>${title}</h2><div class="options">${choices}</div>${button({ act: 'reward', arg: -1, label: '[SKIP]' })}`;
 }
 
 // ------------------------------------------------------------------ report
 
 const STAMPS = {
-  success: ['good', 'MISSION SUCCESS'], abort: ['amber', 'ABORTED'], lost: ['red', 'VEHICLE LOST'], disaster: ['red', 'DISASTER'],
+  success: ['good', 'MISSION SUCCESS'],
+  abort: ['amber', 'ABORTED'],
+  lost: ['red', 'VEHICLE LOST'],
+  disaster: ['red', 'DISASTER'],
 } as const;
 
 function reportScreen(s: GameState): string {
@@ -365,8 +471,13 @@ function reportScreen(s: GameState): string {
 
 function overScreen(v: View, s: GameState): string {
   const r = v.ruleset;
-  const reached = Object.keys(s.milestones).map((id) => `<li>■ ${esc(short(lookup.getMilestone(r, id).name))}</li>`).join('') || '<li class="dim">NONE</li>';
-  const fallen = s.fallen.map((f) => `<li>${esc(f.name.toUpperCase())} · ${esc(f.mission.toUpperCase())}</li>`).join('') || '<li class="dim">NO ONE</li>';
+  const reached =
+    Object.keys(s.milestones)
+      .map((id) => `<li>■ ${esc(short(lookup.getMilestone(r, id).name))}</li>`)
+      .join('') || '<li class="dim">NONE</li>';
+  const fallen =
+    s.fallen.map((f) => `<li>${esc(f.name.toUpperCase())} · ${esc(f.mission.toUpperCase())}</li>`).join('') ||
+    '<li class="dim">NO ONE</li>';
   return `
     <div class="stamp ${s.outcome?.won ? 'good' : 'red'} pop">${s.outcome?.won ? 'VICTORY' : 'PROGRAM ENDED'}</div>
     <p class="event-text">${esc(s.outcome?.reason ?? '')}</p>

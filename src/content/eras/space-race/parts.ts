@@ -2,7 +2,7 @@
 // lift: boosters + upper stages add up; a mission needs at least its liftNeeded.
 // reliability: chance (0-100) the phases this part handles go smoothly.
 
-import type { PartDef } from './types.ts';
+import type { PartDef } from '../../types.ts';
 
 export const parts: PartDef[] = [
   // --- Boosters (handle the launch phase) ---

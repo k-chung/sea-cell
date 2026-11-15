@@ -4,16 +4,39 @@
 import './styles.css';
 import type { Balance } from '../content/types.ts';
 import {
-  actionsUntilTurn, createGame, dateLabel, lookup, newSeed, replay, step, STATE_VERSION,
-  type Action, type GameState, type ProgramAction, type RocketChoice, type RunRecord,
+  type Action,
+  actionsUntilTurn,
+  createGame,
+  dateLabel,
+  type GameState,
+  lookup,
+  newSeed,
+  type ProgramAction,
+  type RocketChoice,
+  type RunRecord,
+  replay,
+  STATE_VERSION,
+  step,
 } from '../core/index.ts';
 import { renderDevPanel } from './devPanel.ts';
-import { play, type SoundName } from './sound.ts';
-import { draftPlan, emptyDraft, renderApp, type Draft } from './render.ts';
+import { type Draft, draftPlan, emptyDraft, renderApp } from './render.ts';
 import { baseRuleset, withOverrides } from './ruleset.ts';
+import { play, type SoundName } from './sound.ts';
 import {
-  addNote, addToHall, clearNotes, loadBalanceOverrides, loadSound, saveSound, loadNotes, loadSave, loadTextSize,
-  saveBalanceOverrides, saveTextSize, SAVE_VERSION, writeSave, type FeedbackNote,
+  addNote,
+  addToHall,
+  clearNotes,
+  type FeedbackNote,
+  loadBalanceOverrides,
+  loadNotes,
+  loadSave,
+  loadSound,
+  loadTextSize,
+  SAVE_VERSION,
+  saveBalanceOverrides,
+  saveSound,
+  saveTextSize,
+  writeSave,
 } from './storage.ts';
 
 // ------------------------------------------------------------------ app state (UI only)
@@ -68,7 +91,12 @@ function loadRun(run: RunRecord, overrides: Partial<Balance>): void {
 
 function save(): void {
   if (!app.run) return;
-  writeSave({ saveVersion: SAVE_VERSION, stateVersion: STATE_VERSION, run: app.run, balanceOverrides: app.runOverrides });
+  writeSave({
+    saveVersion: SAVE_VERSION,
+    stateVersion: STATE_VERSION,
+    run: app.run,
+    balanceOverrides: app.runOverrides,
+  });
 }
 
 /** Send one action to the core. Every game change goes through here. */
@@ -106,9 +134,14 @@ function recordHall(s: GameState): void {
   const r = ruleset();
   addToHall(
     {
-      endedAt: new Date().toISOString(), won: !!s.outcome?.won, reason: s.outcome?.reason ?? '',
-      date: dateLabel(r, s.turn), prestige: s.prestige, milestones: Object.keys(s.milestones).length,
-      seed: s.seed, storyMode: s.options.storyMode,
+      endedAt: new Date().toISOString(),
+      won: !!s.outcome?.won,
+      reason: s.outcome?.reason ?? '',
+      date: dateLabel(r, s.turn),
+      prestige: s.prestige,
+      milestones: Object.keys(s.milestones).length,
+      seed: s.seed,
+      storyMode: s.options.storyMode,
     },
     s.fallen.map((f) => ({ name: f.name, mission: f.mission, date: dateLabel(r, f.turn) })),
   );
@@ -119,8 +152,12 @@ function recordHall(s: GameState): void {
 function currentReport(note: string): FeedbackNote | null {
   if (!app.run || !app.state) return null;
   return {
-    note, createdAt: new Date().toISOString(), date: dateLabel(ruleset(), app.state.turn),
-    phase: app.state.phase, balanceOverrides: app.runOverrides, run: app.run,
+    note,
+    createdAt: new Date().toISOString(),
+    date: dateLabel(ruleset(), app.state.turn),
+    phase: app.state.phase,
+    balanceOverrides: app.runOverrides,
+    run: app.run,
   };
 }
 
@@ -182,52 +219,89 @@ function toggleCrew(id: string): void {
 function onAct(act: string, arg: string, el: HTMLElement): void {
   switch (act) {
     // Title / menus
-    case 'new-run': startRun(app.pendingOverrides); break;
+    case 'new-run':
+      startRun(app.pendingOverrides);
+      break;
     case 'continue-save': {
       const saved = loadSave();
       if (saved) loadRun(saved.run, saved.balanceOverrides);
       break;
     }
-    case 'menu': app.state = null; app.run = null; break;
-    case 'story-mode': app.storyMode = (el as HTMLInputElement).checked; break;
+    case 'menu':
+      app.state = null;
+      app.run = null;
+      break;
+    case 'story-mode':
+      app.storyMode = (el as HTMLInputElement).checked;
+      break;
 
     // Plan screen
     case 'mission':
-      updateDraft((d) => { d.missionId = arg; });
+      updateDraft((d) => {
+        d.missionId = arg;
+      });
       scrollToBuilder = window.matchMedia('(max-width: 800px)').matches;
       break;
     case 'part': {
       const [slot, id] = arg.split('|') as ['booster' | 'upper' | 'payload', string];
-      updateDraft((d) => { d[slot] = d[slot] === id ? null : id; });
+      updateDraft((d) => {
+        d[slot] = d[slot] === id ? null : id;
+      });
       break;
     }
-    case 'crew': toggleCrew(arg); break;
-    case 'test-flight': app.draft.testFlight = (el as HTMLInputElement).checked; break;
-    case 'redundancy': app.draft.redundancy = (el as HTMLInputElement).checked; break;
+    case 'crew':
+      toggleCrew(arg);
+      break;
+    case 'test-flight':
+      app.draft.testFlight = (el as HTMLInputElement).checked;
+      break;
+    case 'redundancy':
+      app.draft.redundancy = (el as HTMLInputElement).checked;
+      break;
     case 'launch': {
       const plan = draftPlan(app.draft);
       if (plan) dispatch({ type: 'launch', ...plan });
       break;
     }
-    case 'program': dispatch({ type: 'program', program: arg as ProgramAction }); break;
+    case 'program':
+      dispatch({ type: 'program', program: arg as ProgramAction });
+      break;
 
     // Crisis / reward / report
-    case 'option': dispatch({ type: 'chooseOption', index: Number(arg) }); break;
-    case 'reward': dispatch({ type: 'chooseReward', index: Number(arg) }); break;
-    case 'continue': dispatch({ type: 'continue' }); break;
+    case 'option':
+      dispatch({ type: 'chooseOption', index: Number(arg) });
+      break;
+    case 'reward':
+      dispatch({ type: 'chooseReward', index: Number(arg) });
+      break;
+    case 'continue':
+      dispatch({ type: 'continue' });
+      break;
 
     // Tools
-    case 'note': openNote(); return;
-    case 'note-save': saveNote(); break;
-    case 'note-cancel': app.noteOpen = false; break;
-    case 'dev': app.devOpen = !app.devOpen; break;
+    case 'note':
+      openNote();
+      return;
+    case 'note-save':
+      saveNote();
+      break;
+    case 'note-cancel':
+      app.noteOpen = false;
+      break;
+    case 'dev':
+      app.devOpen = !app.devOpen;
+      break;
     case 'sound':
       app.soundOn = !app.soundOn;
       saveSound(app.soundOn);
       if (app.soundOn) play('click');
       break;
-    case 'text-smaller': setTextSize(loadTextSize() - 1); break;
-    case 'text-larger': setTextSize(loadTextSize() + 1); break;
+    case 'text-smaller':
+      setTextSize(loadTextSize() - 1);
+      break;
+    case 'text-larger':
+      setTextSize(loadTextSize() + 1);
+      break;
 
     // Dev panel
     case 'dev-copy-report': {
@@ -251,9 +325,15 @@ function onAct(act: string, arg: string, el: HTMLElement): void {
       dispatch({ type: 'dev', command: 'forceEvent', eventId });
       break;
     }
-    case 'dev-budget': dispatch({ type: 'dev', command: 'addBudget', amount: 50 }); break;
-    case 'dev-load': loadReportText((document.getElementById('dev-load') as HTMLTextAreaElement).value); break;
-    case 'dev-download-notes': download('sea-cell-notes.json', loadNotes()); break;
+    case 'dev-budget':
+      dispatch({ type: 'dev', command: 'addBudget', amount: 50 });
+      break;
+    case 'dev-load':
+      loadReportText((document.getElementById('dev-load') as HTMLTextAreaElement).value);
+      break;
+    case 'dev-download-notes':
+      download('sea-cell-notes.json', loadNotes());
+      break;
     case 'dev-copy-notes':
       navigator.clipboard?.writeText(JSON.stringify(loadNotes())).catch(() => undefined);
       break;
@@ -261,9 +341,16 @@ function onAct(act: string, arg: string, el: HTMLElement): void {
       if (app.confirmClearNotes) clearNotes();
       app.confirmClearNotes = !app.confirmClearNotes;
       break;
-    case 'dev-new-with-balance': startRun(app.pendingOverrides); break;
-    case 'dev-export-balance': download('sea-cell-balance.json', { ...baseRuleset.balance, ...app.pendingOverrides }); break;
-    case 'dev-reset-balance': app.pendingOverrides = {}; saveBalanceOverrides({}); break;
+    case 'dev-new-with-balance':
+      startRun(app.pendingOverrides);
+      break;
+    case 'dev-export-balance':
+      download('sea-cell-balance.json', { ...baseRuleset.balance, ...app.pendingOverrides });
+      break;
+    case 'dev-reset-balance':
+      app.pendingOverrides = {};
+      saveBalanceOverrides({});
+      break;
     default:
       console.warn(`Unhandled UI action "${act}"`);
   }
@@ -303,8 +390,16 @@ document.addEventListener('input', (e) => {
 document.addEventListener('keydown', (e) => {
   const typing = (e.target as HTMLElement).closest('input, textarea, select');
   if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
-  if (e.key === '`') { app.devOpen = !app.devOpen; render(); return; }
-  if (e.key === 'n' || e.key === 'N') { e.preventDefault(); openNote(); return; }
+  if (e.key === '`') {
+    app.devOpen = !app.devOpen;
+    render();
+    return;
+  }
+  if (e.key === 'n' || e.key === 'N') {
+    e.preventDefault();
+    openNote();
+    return;
+  }
   if (/^[1-9]$/.test(e.key)) {
     const buttons = root.querySelectorAll<HTMLButtonElement>('.options button[data-act]');
     buttons[Number(e.key) - 1]?.click();
@@ -320,22 +415,32 @@ let scrollToBuilder = false;
 function render(): void {
   const focusKey = (document.activeElement as HTMLElement | null)?.dataset?.key;
   root.innerHTML = renderApp({
-    state: app.state, ruleset: ruleset(), draft: app.draft,
-    hasSave: !!loadSave(), storyMode: app.storyMode, error: app.error, noteOpen: app.noteOpen,
-    soundOn: app.soundOn, lastRocket: app.lastRocket,
+    state: app.state,
+    ruleset: ruleset(),
+    draft: app.draft,
+    hasSave: !!loadSave(),
+    storyMode: app.storyMode,
+    error: app.error,
+    noteOpen: app.noteOpen,
+    soundOn: app.soundOn,
+    lastRocket: app.lastRocket,
   });
   devRoot.innerHTML = app.devOpen
     ? renderDevPanel({
-      state: app.state, run: app.run, ruleset: ruleset(), pendingOverrides: app.pendingOverrides,
-      confirmClearNotes: app.confirmClearNotes,
-    })
+        state: app.state,
+        run: app.run,
+        ruleset: ruleset(),
+        pendingOverrides: app.pendingOverrides,
+        confirmClearNotes: app.confirmClearNotes,
+      })
     : '';
 
   // Keyboard players: keep focus on the same control, or move it to the main button on a new screen.
   const phase = app.state?.phase ?? 'title';
   const same = focusKey ? document.querySelector<HTMLElement>(`[data-key="${CSS.escape(focusKey)}"]`) : null;
   if (same && phase === lastPhase) same.focus();
-  else if (phase !== lastPhase) root.querySelector<HTMLElement>('.options button, button.primary:not(:disabled)')?.focus({ preventScroll: true });
+  else if (phase !== lastPhase)
+    root.querySelector<HTMLElement>('.options button, button.primary:not(:disabled)')?.focus({ preventScroll: true });
   lastPhase = phase;
   if (scrollToBuilder) {
     root.querySelector('#builder')?.scrollIntoView({ block: 'start' });

@@ -4,10 +4,10 @@
 
 import type { Ruleset } from '../content/types.ts';
 import type { Action } from './actions.ts';
-import type { GamePhase, GameState } from './state.ts';
 import { chooseOption, launch } from './flight.ts';
-import { chooseReward, continueAfterReport, runProgram } from './turn.ts';
 import { getEvent } from './lookup.ts';
+import type { GamePhase, GameState } from './state.ts';
+import { chooseReward, continueAfterReport, runProgram } from './turn.ts';
 
 function expectPhase(s: GameState, phase: GamePhase, action: Action): void {
   if (s.phase !== phase) {

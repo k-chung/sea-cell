@@ -1,5 +1,5 @@
 // Pixel sprites as text. Each string is one row; each letter is one pixel.
-// Letters are colors from the CRT palette (see src/ui/sprites.ts):
+// Letters are colors from the CRT palette (see src/ui/art.ts):
 //   .  empty      d  dark green   m  mid green   b  bright green   w  near-white
 //   a  amber      r  red
 // Face sprites also use: S skin, H hair, k eyes, o mouth, u suit (the UI picks shades per astronaut).

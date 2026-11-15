@@ -1,14 +1,24 @@
 // Turns text pixel maps (src/content/sprites.ts) into small SVG images.
 // Colors come from CSS variables, so the CRT theme controls every sprite.
 
-import type { PartDef } from '../content/types.ts';
 import {
-  boosterSprites, faceSprite, flameSprite, hairStyles, payloadSprites, rivalSprite, upperSprites,
-} from '../content/sprites.ts';
+  boosterSprites,
+  faceSprite,
+  flameSprite,
+  hairStyles,
+  payloadSprites,
+  rivalSprite,
+  upperSprites,
+} from '../content/art/pixel-sprites.ts';
+import type { PartDef } from '../content/types.ts';
 
 const COLORS: Record<string, string> = {
-  d: 'var(--px-dark)', m: 'var(--px-mid)', b: 'var(--px-bright)', w: 'var(--px-white)',
-  a: 'var(--px-amber)', r: 'var(--px-red)',
+  d: 'var(--px-dark)',
+  m: 'var(--px-mid)',
+  b: 'var(--px-bright)',
+  w: 'var(--px-white)',
+  a: 'var(--px-amber)',
+  r: 'var(--px-red)',
 };
 
 /** One SVG for a pixel map. `scale` = screen pixels per sprite pixel. */
@@ -26,7 +36,12 @@ export function sprite(rows: string[], scale: number, label: string, cls = ''): 
 }
 
 /** A rocket stacked from the chosen parts: payload on top, then upper stage, then booster. */
-export function rocketRows(booster: PartDef | null, upper: PartDef | null, payload: PartDef | null, flame: boolean): string[] {
+export function rocketRows(
+  booster: PartDef | null,
+  upper: PartDef | null,
+  payload: PartDef | null,
+  flame: boolean,
+): string[] {
   const rows: string[] = [];
   if (payload?.payloadKind) rows.push(...payloadSprites[payload.payloadKind]);
   if (upper) rows.push(...(upper.fuel === 'hydrolox' ? upperSprites.hydrogen : upperSprites.standard));
@@ -54,8 +69,11 @@ export function face(id: string, name: string, scale: number, dead = false): str
   const rows = faceSprite.map((row, i) => {
     const withHair = i === 2 ? row.slice(0, 3) + hair + row.slice(9) : row;
     return withHair
-      .replaceAll('S', skin).replaceAll('H', hairColor).replaceAll('k', 'd')
-      .replaceAll('o', 'd').replaceAll('u', dead ? 'd' : 'm');
+      .replaceAll('S', skin)
+      .replaceAll('H', hairColor)
+      .replaceAll('k', 'd')
+      .replaceAll('o', 'd')
+      .replaceAll('u', dead ? 'd' : 'm');
   });
   return sprite(rows, scale, name, dead ? 'dead' : '');
 }
@@ -63,6 +81,9 @@ export function face(id: string, name: string, scale: number, dead = false): str
 export const rivalIcon = (scale: number) => sprite(rivalSprite, scale, 'Soviet program');
 
 /** The big rocket on the title screen. */
-export const titleRocket = (scale: number) => sprite(
-  [...payloadSprites.lunarCapsule, ...upperSprites.hydrogen, ...boosterSprites.large, ...flameSprite],
-  scale, 'Moon rocket lifting off');
+export const titleRocket = (scale: number) =>
+  sprite(
+    [...payloadSprites.lunarCapsule, ...upperSprites.hydrogen, ...boosterSprites.large, ...flameSprite],
+    scale,
+    'Moon rocket lifting off',
+  );

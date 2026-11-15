@@ -6,7 +6,8 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 
 // Only the files the game page uses (not the dev-only gallery).
 const index = readFileSync('dist-single/build/index.html', 'utf8');
-const used = (re: RegExp) => [...index.matchAll(re)].map((m) => readFileSync(`dist-single/build/${m[1]}`, 'utf8')).join('\n');
+const used = (re: RegExp) =>
+  [...index.matchAll(re)].map((m) => readFileSync(`dist-single/build/${m[1]}`, 'utf8')).join('\n');
 const css = used(/href="\.\/(assets\/[^"]+\.css)"/g);
 const js = used(/src="\.\/(assets\/[^"]+\.js)"/g);
 if (js.includes('</script')) throw new Error('Bundled JS contains "</script"; cannot inline safely');

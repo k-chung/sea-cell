@@ -2,7 +2,7 @@
 // Change a number, reload, play. The dev panel (press `) can also override these live.
 // Odds and reliability are percentages (0-100). Support (public, congress) runs 0-100.
 
-import type { Balance } from './types.ts';
+import type { Balance } from '../../types.ts';
 
 export const balance: Balance = {
   // --- Calendar ---

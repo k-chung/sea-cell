@@ -1,22 +1,16 @@
-// Rulesets: a named bundle of content + balance numbers.
-// To prototype a variant, add a ruleset here (e.g. different parts, fewer events, a faster rival).
+// Rulesets: an era's content + balance numbers, plus the goal. Prototype variants are extra rulesets
+// here (e.g. a faster rival), not forks of the code.
 
+import * as spaceRace from './eras/space-race/index.ts';
 import type { Ruleset } from './types.ts';
-import { balance } from './balance.ts';
-import { parts } from './parts.ts';
-import { milestones, missions } from './missions.ts';
-import { traits, astronautNames } from './crew.ts';
-import { events } from './events.ts';
-import { personnel, favors } from './people.ts';
 
-export const cellRuleset: Ruleset = {
-  id: 'cell',
-  name: 'v0.1 "cell": the Moon race',
+export const spaceRaceRuleset: Ruleset = {
+  id: 'space-race',
+  name: 'The Space Race (1957-1969)',
+  era: spaceRace.era,
   goalMilestone: 'moonLanding',
-  content: { parts, milestones, missions, traits, events, personnel, favors, astronautNames },
-  balance,
+  content: spaceRace.content,
+  balance: spaceRace.balance,
 };
 
-export const rulesets: Record<string, Ruleset> = {
-  cell: cellRuleset,
-};
+export const rulesets: Record<string, Ruleset> = { [spaceRaceRuleset.id]: spaceRaceRuleset };
