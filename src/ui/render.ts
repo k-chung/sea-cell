@@ -23,8 +23,8 @@ import {
   rewardLabel,
   testFlightCost,
 } from '../core/index.ts';
-import { button, esc } from './html.ts';
 import { face, rivalIcon, rocketRows, sprite, titleRocket } from './art.ts';
+import { button, esc } from './html.ts';
 import { loadHall } from './storage.ts';
 
 /** What the player has picked on the plan screen but not launched yet (UI-only). */
