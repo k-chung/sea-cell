@@ -137,6 +137,40 @@ export interface FavorDef {
   instant?: { budget?: number; public?: number; congress?: number };
 }
 
+/**
+ * What a program card does. A FIXED, short list on purpose: each kind is applied in
+ * src/core/cards.ts and has a unit test. Need something new? Add a kind there; don't invent a mini-language.
+ */
+export type Effect =
+  | { kind: 'budget'; amount: number }
+  | { kind: 'public'; amount: number }
+  | { kind: 'congress'; amount: number }
+  | { kind: 'prestige'; amount: number }
+  /** Extra action points next turn (negative = fewer). */
+  | { kind: 'actionsNextTurn'; amount: number }
+  /** Added to every phase's reliability on the next launch (negative = worse). */
+  | { kind: 'nextLaunchBonus'; amount: number }
+  /** Deal this many extra cards into the current offer. */
+  | { kind: 'drawCards'; amount: number };
+
+/** A managerial decision card. Costs budget and action points; does its effects. */
+export interface ProgramCardDef {
+  id: string;
+  name: string;
+  /** One short line shown on the card. */
+  text: string;
+  cost: number;
+  actions: number;
+  effects: Effect[];
+}
+
+/** Every card on the table points at content by kind + id. Astronaut cards point at a trait. */
+export type CardKind = 'program' | 'part' | 'staff' | 'astronaut';
+export interface CardRef {
+  kind: CardKind;
+  id: string;
+}
+
 /** Every tunable number in one place. See src/content/balance.ts. */
 export interface Balance {
   startYear: number;
@@ -147,7 +181,11 @@ export interface Balance {
   startCrew: number;
   baseIncome: number;
   incomePerCongress: number;
-  handSize: number;
+  actionsPerTurn: number;
+  offerSize: number;
+  partCardActions: number;
+  partCostMultiplier: number;
+  staffHireCost: number;
   minorCrisisChance: number;
   reliabilityPerFlight: number;
   maxFlightBonus: number;
@@ -178,18 +216,13 @@ export interface Balance {
   rivalSpeed: number;
   rivalVariance: number;
   rivalIntelErrorChance: number;
-  researchCost: number;
-  researchChoices: number;
-  prCost: number;
-  prPublic: number;
-  lobbyCongress: number;
-  lobbyPublic: number;
   recruitCost: number;
   rewardChoices: number;
 }
 
 export interface Content {
   parts: PartDef[];
+  programCards: ProgramCardDef[];
   milestones: MilestoneDef[];
   missions: MissionDef[];
   traits: TraitDef[];

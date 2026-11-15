@@ -16,8 +16,9 @@ Playtest notes (N key) pasted into issues can be replayed in the dev panel ("Loa
 
 ## Branches, PRs, versions
 - One module/feature per branch + PR; `main` always builds and plays; the owner merges.
-- Tag each playable milestone (the owner creates tags: this environment can't) with a CHANGELOG.md entry.
-- Pivots: tag the current build, log why in `docs/decisions.md`, update the design doc (dropped ideas go to
+- Each playable milestone gets a CHANGELOG.md entry and its own hosted link. No git tags (dropped 2026-11-15:
+  friction without value; hosted links + merged PRs already preserve every version).
+- Pivots: keep the current build's hosted link, log why in `docs/decisions.md`, update the design doc (dropped ideas go to
   the Parking lot), build the new direction on a branch.
 
 ## Ending a session / module

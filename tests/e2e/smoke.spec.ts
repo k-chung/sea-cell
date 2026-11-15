@@ -18,7 +18,8 @@ test('a full run from title to game over', async ({ page }) => {
   await page.goto('/?seed=777');
   await page.click('[data-act="new-run"]');
 
-  // Turn 1: build and launch a satellite from whatever the hand allows.
+  // Turn 1: play a card, then build and launch a satellite.
+  await page.locator('[data-act="card"]:not([disabled])').first().click();
   await page.click('[data-act="mission"][data-arg="satellite"]');
   for (const slot of ['booster', 'upper', 'payload']) {
     await page.locator(`[data-act="part"][data-arg^="${slot}|"]`).first().click();
@@ -27,21 +28,20 @@ test('a full run from title to game over', async ({ page }) => {
   if (await launch.isEnabled()) await launch.click();
 
   // Then answer whatever comes up until the run ends.
-  for (let i = 0; i < 200 && !(await page.locator('.phase-over').count()); i++) {
-    if (await page.locator('.phase-crisis').count()) await page.keyboard.press('1');
-    else if (await page.locator('.phase-reward').count()) await page.keyboard.press('1');
-    else if (await page.locator('.phase-report').count()) await page.click('[data-act="continue"]');
-    else await page.click('[data-act="program"][data-arg="wait"]');
+  for (let i = 0; i < 300 && !(await page.locator('main.phase-over').count()); i++) {
+    if (await page.locator('main.phase-crisis').count()) await page.keyboard.press('1');
+    else if (await page.locator('main.phase-reward').count()) await page.keyboard.press('1');
+    else if (await page.locator('main.phase-report').count()) await page.click('[data-act="continue"]');
+    else await page.click('[data-act="end-turn"]');
   }
-  await expect(page.locator('.phase-over .stamp')).toBeVisible();
+  await expect(page.locator('main.phase-over .stamp')).toBeVisible();
   expect(errors).toEqual([]);
 });
 
 test('the scene gallery renders every screen', async ({ page }) => {
   const errors = watchErrors(page);
   await page.goto('/gallery.html');
-  await expect(page.locator('.scene')).toHaveCount(9);
-  await expect(page.locator('.scene .console').first()).toBeVisible();
+  await expect(page.locator('.scene')).toHaveCount(8);
   expect(errors).toEqual([]);
 });
 

@@ -16,11 +16,15 @@ export const balance: Balance = {
   startCrew: 6,
 
   // --- Money ---
-  baseIncome: 18,
+  baseIncome: 12,
   incomePerCongress: 0.4, // income = baseIncome + congress x this
 
   // --- Rockets ---
-  handSize: 5,
+  actionsPerTurn: 3, // action points to spend on cards each turn
+  offerSize: 5, // cards dealt into the offer each turn
+  partCardActions: 1, // acquiring a part card costs this many action points...
+  partCostMultiplier: 4, // ...and its flight cost x this in budget
+  staffHireCost: 25,
   reliabilityPerFlight: 3, // each successful flight of a part makes it more reliable...
   maxFlightBonus: 12, // ...up to this much
   reliabilityCap: 97,
@@ -52,19 +56,13 @@ export const balance: Balance = {
   idlePublic: -3, // turns with no launch
 
   // --- Rival ---
-  rivalSpeed: 1.25, // effort per turn
+  rivalSpeed: 1.45, // effort per turn
   rivalVariance: 0.5, // +/- random effort per turn
   rivalShockPublic: -4, // when the rival gets a first
   rivalShockCongress: 4, // ...Congress panics and funds you more
   rivalIntelErrorChance: 0.25,
 
-  // --- Program actions (instead of a mission) ---
-  researchCost: 15,
-  researchChoices: 3,
-  prCost: 10,
-  prPublic: 8,
-  lobbyCongress: 8,
-  lobbyPublic: -3,
+  // --- Recruiting (astronaut cards) ---
   recruitCost: 8,
 
   // --- Rewards ---

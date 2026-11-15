@@ -2,7 +2,14 @@
 
 Plain-English notes on each playable version. Newest first.
 
-## Unreleased: Module 0 (groundwork for the card-based redesign)
+## Module 1: cards and planning
+- Each turn: 3 action points and a random offer of 5 cards: decisions, rocket parts, staff, astronauts.
+- 11 decision cards (PR, lobbying, contracts, static fires, audits, crunch time...), many with strings attached.
+- Parts are acquired as cards and kept; rockets are built from any part you own.
+- Research/lobby/PR/recruit menu removed (they're cards now). Launching or ending the turn ends planning.
+- New UI built with Preact; plain placeholder look until Module 3 (art).
+
+## Module 0 (groundwork for the card-based redesign)
 - No gameplay changes. Content reorganized by era; art layer; Biome lint/format; slimmer CLAUDE.md + docs.
 
 ## v0.2 "worm": the Mission Control look

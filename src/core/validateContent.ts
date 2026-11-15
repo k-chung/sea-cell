@@ -25,6 +25,12 @@ export function validateContent(r: Ruleset): string[] {
   checkUnique('missions.ts (milestones)', c.milestones);
   checkUnique('missions.ts (missions)', c.missions);
   checkUnique('crew.ts (traits)', c.traits);
+  checkUnique('programs.ts', c.programCards);
+  for (const card of c.programCards) {
+    const where = `programs.ts "${card.id}"`;
+    if (card.cost < 0 || card.actions < 0) errors.push(`${where}: cost and actions can't be negative`);
+    if (card.effects.length === 0) errors.push(`${where}: needs at least one effect`);
+  }
   checkUnique('events.ts', c.events);
   checkUnique('people.ts (personnel)', c.personnel);
   checkUnique('people.ts (favors)', c.favors);

@@ -15,7 +15,7 @@ if (js.includes('</script')) throw new Error('Bundled JS contains "</script"; ca
 // The page host adds its own doctype/html/head/body, so the file holds just the page content.
 const html = `<title>Sea Cell</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap">
 <style>
 ${css}
 </style>

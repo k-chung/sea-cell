@@ -14,6 +14,8 @@
     "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true,
     "skipLibCheck": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
     "types": ["node"]
   },
   "include": ["src", "tests", "tools"]

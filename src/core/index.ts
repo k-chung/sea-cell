@@ -1,7 +1,9 @@
 // The core's public API. The UI and tools import from here only.
 
-export type { Action, ProgramAction } from './actions.ts';
+export type { Action } from './actions.ts';
 export { dateLabel } from './calendar.ts';
+export type { CardView } from './cards.ts';
+export { cardView, effectLabel, offerViews } from './cards.ts';
 export { createGame } from './create.ts';
 export type { OptionView } from './crisis.ts';
 export { crisisOptions, fillText } from './crisis.ts';
@@ -14,6 +16,5 @@ export { missionStatus, partReliability, previewLaunch, testFlightCost } from '.
 export type { Astronaut, GameOptions, GamePhase, GameState, RewardChoice, RocketChoice } from './state.ts';
 export { STATE_VERSION } from './state.ts';
 export { step } from './step.ts';
-export type { ProgramView } from './turn.ts';
-export { income, programOptions, rewardLabel } from './turn.ts';
+export { income, rewardLabel } from './turn.ts';
 export { validateContent } from './validateContent.ts';

@@ -79,7 +79,7 @@ export function previewLaunch(s: GameState, r: Ruleset, plan: LaunchPlan): Launc
   const status = missionStatus(s, r, mission);
   if (status.status === 'locked') problems.push(`Needs first: ${status.missing.join(', ')}`);
 
-  // Parts must be in the current hand and in the right slot.
+  // Parts must be acquired (unlocked) and in the right slot.
   const booster = getPart(r, plan.rocket.booster);
   const upper = getPart(r, plan.rocket.upper);
   const payload = getPart(r, plan.rocket.payload);
@@ -89,7 +89,7 @@ export function previewLaunch(s: GameState, r: Ruleset, plan: LaunchPlan): Launc
     [payload, 'payload'],
   ] as const) {
     if (part.slot !== slot) problems.push(`${part.name} is not a ${slot}`);
-    if (!s.hand.includes(part.id)) problems.push(`${part.name} is not in your hand this turn`);
+    if (!s.unlockedParts.includes(part.id)) problems.push(`${part.name} has not been acquired`);
   }
 
   const lift = booster.lift + upper.lift;
@@ -136,6 +136,7 @@ export function previewLaunch(s: GameState, r: Ruleset, plan: LaunchPlan): Launc
     if (sameFuel && slot !== 'payload') rel += b.sameFuelBonus;
     if (phase === 'launch' && margin) rel += b.liftMarginBonus;
     if (phase === 'launch' && plan.testFlight) rel += b.testFlightBonus;
+    rel += s.nextLaunchBonus; // from cards like Static Fire Campaign or Cost Cutting
     return { phase, partName: part.name, reliability: Math.max(1, Math.min(rel, b.reliabilityCap)) };
   });
 

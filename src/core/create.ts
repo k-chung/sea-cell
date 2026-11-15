@@ -1,10 +1,10 @@
-// Start a new run: check the content, build the starting state, recruit crew, deal the first hand.
+// Start a new run: check the content, build the starting state, recruit crew, deal the first offer of cards.
 
 import type { Ruleset } from '../content/types.ts';
 import { recruitAstronaut } from './astronauts.ts';
+import { dealCards } from './cards.ts';
 import { createRng } from './rng.ts';
 import { type GameOptions, type GameState, STATE_VERSION } from './state.ts';
-import { drawHand } from './turn.ts';
 import { validateContent } from './validateContent.ts';
 
 export function createGame(r: Ruleset, seed: number, options: GameOptions): GameState {
@@ -26,7 +26,10 @@ export function createGame(r: Ruleset, seed: number, options: GameOptions): Game
     prestige: 0,
     unlockedParts: r.content.parts.filter((p) => p.startsUnlocked).map((p) => p.id),
     partFlights: {},
-    hand: [],
+    actions: b.actionsPerTurn,
+    actionsNextTurn: 0,
+    offer: [],
+    nextLaunchBonus: 0,
     crew: [],
     nextCrewNumber: 1,
     personnel: [],
@@ -47,6 +50,6 @@ export function createGame(r: Ruleset, seed: number, options: GameOptions): Game
   };
 
   for (let i = 0; i < b.startCrew; i++) recruitAstronaut(s, r);
-  drawHand(s, r);
+  dealCards(s, r, b.offerSize);
   return s;
 }

@@ -6,22 +6,25 @@
  },
  "actions": [
   {
-   "type": "program",
-   "program": "research"
+   "type": "playCard",
+   "index": 3
   },
   {
-   "type": "chooseReward",
-   "index": 1
+   "type": "endTurn"
   },
   {
    "type": "continue"
   },
   {
+   "type": "playCard",
+   "index": 4
+  },
+  {
    "type": "launch",
    "missionId": "satellite",
    "crewIds": [],
-   "testFlight": true,
-   "redundancy": true,
+   "testFlight": false,
+   "redundancy": false,
    "rocket": {
     "booster": "javelin",
     "upper": "vanguard-2",
@@ -36,29 +39,22 @@
    "index": 0
   },
   {
-   "type": "program",
-   "program": "research"
-  },
-  {
-   "type": "chooseReward",
-   "index": 0
-  },
-  {
-   "type": "continue"
-  },
-  {
    "type": "launch",
    "missionId": "crewedOrbit",
    "crewIds": [
     "crew-1"
    ],
-   "testFlight": true,
-   "redundancy": true,
+   "testFlight": false,
+   "redundancy": false,
    "rocket": {
-    "booster": "titanus",
-    "upper": "agile",
+    "booster": "javelin",
+    "upper": "vanguard-2",
     "payload": "pilgrim"
    }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
   },
   {
    "type": "continue"
@@ -66,6 +62,16 @@
   {
    "type": "chooseReward",
    "index": 0
+  },
+  {
+   "type": "playCard",
+   "index": 0
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
   },
   {
    "type": "launch",
@@ -74,17 +80,43 @@
     "crew-1",
     "crew-2"
    ],
-   "testFlight": true,
-   "redundancy": true,
+   "testFlight": false,
+   "redundancy": false,
    "rocket": {
     "booster": "titanus",
-    "upper": "vanguard-2",
+    "upper": "agile",
     "payload": "tandem"
    }
   },
   {
    "type": "chooseOption",
+   "index": 2
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "chooseReward",
    "index": 1
+  },
+  {
+   "type": "launch",
+   "missionId": "docking",
+   "crewIds": [
+    "crew-1",
+    "crew-2"
+   ],
+   "testFlight": false,
+   "redundancy": false,
+   "rocket": {
+    "booster": "titanus",
+    "upper": "agile",
+    "payload": "tandem"
+   }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
   },
   {
    "type": "continue"
@@ -92,6 +124,90 @@
   {
    "type": "chooseReward",
    "index": 0
+  },
+  {
+   "type": "playCard",
+   "index": 2
+  },
+  {
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "playCard",
+   "index": 2
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "launch",
+   "missionId": "docking",
+   "crewIds": [
+    "crew-1",
+    "crew-2"
+   ],
+   "testFlight": false,
+   "redundancy": false,
+   "rocket": {
+    "booster": "titanus",
+    "upper": "agile",
+    "payload": "tandem"
+   }
+  },
+  {
+   "type": "chooseOption",
+   "index": 2
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 0
+  },
+  {
+   "type": "playCard",
+   "index": 2
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 4
+  },
+  {
+   "type": "playCard",
+   "index": 1
+  },
+  {
+   "type": "launch",
+   "missionId": "docking",
+   "crewIds": [
+    "crew-1",
+    "crew-2"
+   ],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "javelin",
+    "upper": "centaurus",
+    "payload": "tandem"
+   }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
+  },
+  {
+   "type": "continue"
   },
   {
    "type": "launch",
@@ -116,129 +232,22 @@
    "type": "continue"
   },
   {
-   "type": "program",
-   "program": "research"
-  },
-  {
-   "type": "chooseReward",
+   "type": "playCard",
    "index": 0
   },
   {
+   "type": "endTurn"
+  },
+  {
    "type": "continue"
   },
   {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-3",
-    "crew-4"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "colossus-5",
-    "upper": "vanguard-2",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "chooseOption",
+   "type": "playCard",
    "index": 0
   },
   {
-   "type": "continue"
-  },
-  {
-   "type": "chooseReward",
-   "index": 0
-  },
-  {
-   "type": "program",
-   "program": "research"
-  },
-  {
-   "type": "chooseReward",
-   "index": 0
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "launch",
-   "missionId": "lunarFlyby",
-   "crewIds": [
-    "crew-3",
-    "crew-4",
-    "crew-5"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "colossus-5",
-    "upper": "vanguard-2",
-    "payload": "odyssey"
-   }
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "chooseReward",
-   "index": 0
-  },
-  {
-   "type": "program",
-   "program": "research"
-  },
-  {
-   "type": "chooseReward",
-   "index": 1
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-3",
-    "crew-4"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "titanus",
-    "upper": "agile",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 0
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "launch",
-   "missionId": "crewedOrbit",
-   "crewIds": [
-    "crew-3"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "javelin",
-    "upper": "vanguard-2",
-    "payload": "pilgrim"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 1
-  },
-  {
-   "type": "continue"
+   "type": "playCard",
+   "index": 3
   },
   {
    "type": "launch",
@@ -247,8 +256,8 @@
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "colossus-5",
-    "upper": "agile",
+    "booster": "titanus",
+    "upper": "vanguard-2",
     "payload": "surveyor"
    }
   },
@@ -257,20 +266,22 @@
   },
   {
    "type": "chooseReward",
-   "index": 0
+   "index": 2
   },
   {
    "type": "launch",
-   "missionId": "crewedOrbit",
+   "missionId": "lunarFlyby",
    "crewIds": [
+    "crew-1",
+    "crew-2",
     "crew-3"
    ],
-   "testFlight": true,
-   "redundancy": true,
+   "testFlight": false,
+   "redundancy": false,
    "rocket": {
     "booster": "colossus-5",
     "upper": "vanguard-2",
-    "payload": "pilgrim"
+    "payload": "odyssey"
    }
   },
   {
@@ -281,18 +292,26 @@
    "type": "continue"
   },
   {
+   "type": "chooseReward",
+   "index": 1
+  },
+  {
+   "type": "playCard",
+   "index": 2
+  },
+  {
    "type": "launch",
-   "missionId": "lunarFlyby",
+   "missionId": "moonLandingLOR",
    "crewIds": [
-    "crew-3",
-    "crew-4",
-    "crew-5"
+    "crew-1",
+    "crew-2",
+    "crew-3"
    ],
-   "testFlight": true,
+   "testFlight": false,
    "redundancy": false,
    "rocket": {
     "booster": "colossus-5",
-    "upper": "agile",
+    "upper": "centaurus",
     "payload": "odyssey-lander"
    }
   },
@@ -304,142 +323,61 @@
    "type": "continue"
   },
   {
-   "type": "launch",
-   "missionId": "crewedOrbit",
-   "crewIds": [
-    "crew-3"
-   ],
-   "testFlight": true,
-   "redundancy": false,
-   "rocket": {
-    "booster": "colossus-5",
-    "upper": "agile",
-    "payload": "pilgrim"
-   }
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "endTurn"
   },
   {
    "type": "continue"
   },
   {
-   "type": "launch",
-   "missionId": "crewedOrbit",
-   "crewIds": [
-    "crew-3"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "titanus",
-    "upper": "vanguard-2",
-    "payload": "pilgrim"
-   }
+   "type": "playCard",
+   "index": 3
   },
   {
-   "type": "chooseOption",
-   "index": 1
+   "type": "endTurn"
   },
   {
    "type": "continue"
   },
   {
-   "type": "launch",
-   "missionId": "crewedOrbit",
-   "crewIds": [
-    "crew-3"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "javelin",
-    "upper": "vanguard-2",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 1
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-3",
-    "crew-4"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "titanus",
-    "upper": "vanguard-2",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 0
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "launch",
-   "missionId": "lunarFlyby",
-   "crewIds": [
-    "crew-3",
-    "crew-4",
-    "crew-5"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "colossus-5",
-    "upper": "vanguard-2",
-    "payload": "odyssey-lander"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 0
+   "type": "endTurn"
   },
   {
    "type": "continue"
   }
  ],
  "expected": {
-  "turn": 20,
+  "turn": 17,
   "phase": "over",
-  "budget": 45,
-  "public": 81,
-  "congress": 85,
-  "prestige": 35,
+  "budget": 66,
+  "public": 75,
+  "congress": 96,
+  "prestige": 49,
   "milestones": {
    "satellite": 1,
-   "crewedOrbit": 3,
+   "crewedOrbit": 2,
    "spacewalk": 4,
-   "docking": 7,
-   "lunarFlyby": 9,
-   "lunarProbe": 13
+   "docking": 5,
+   "lunarProbe": 12,
+   "lunarFlyby": 13
   },
   "rivalMilestones": {
-   "satellite": 0,
-   "crewedOrbit": 4,
-   "spacewalk": 6,
-   "docking": 9,
-   "lunarProbe": 11,
-   "lunarFlyby": 15,
-   "moonLanding": 20
+   "satellite": 1,
+   "crewedOrbit": 3,
+   "spacewalk": 5,
+   "docking": 7,
+   "lunarProbe": 9,
+   "lunarFlyby": 13,
+   "moonLanding": 17
   },
-  "fallen": [
-   "Wally Sheehan",
-   "Jerrie Cobbett"
-  ],
+  "fallen": [],
   "outcome": {
    "won": false,
    "reason": "The Soviets reached First human on the Moon first."
   },
-  "rngState": 635166669
+  "rngState": -380316183
  }
 }
