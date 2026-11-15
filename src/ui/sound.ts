@@ -16,7 +16,14 @@ function audio(): AudioContext | null {
 }
 
 /** One beep: frequency in Hz, start offset and length in seconds. */
-function tone(a: AudioContext, freq: number, start: number, length: number, type: OscillatorType = 'square', volume = 0.05): void {
+function tone(
+  a: AudioContext,
+  freq: number,
+  start: number,
+  length: number,
+  type: OscillatorType = 'square',
+  volume = 0.05,
+): void {
   const osc = a.createOscillator();
   const gain = a.createGain();
   osc.type = type;
@@ -48,10 +55,27 @@ export function play(name: SoundName): void {
   const a = audio();
   if (!a) return;
   switch (name) {
-    case 'click': return tone(a, 880, 0, 0.04);
-    case 'launch': return rumble(a, 1.4);
-    case 'alarm': [0, 0.3, 0.6].forEach((t) => { tone(a, 660, t, 0.14); tone(a, 440, t + 0.15, 0.14); }); return;
-    case 'success': [523, 659, 784].forEach((f, i) => tone(a, f, i * 0.12, 0.18, 'triangle', 0.07)); return;
-    case 'fail': [330, 247].forEach((f, i) => tone(a, f, i * 0.2, 0.3, 'sawtooth', 0.04)); return;
+    case 'click':
+      tone(a, 880, 0, 0.04);
+      return;
+    case 'launch':
+      rumble(a, 1.4);
+      return;
+    case 'alarm':
+      [0, 0.3, 0.6].forEach((t) => {
+        tone(a, 660, t, 0.14);
+        tone(a, 440, t + 0.15, 0.14);
+      });
+      return;
+    case 'success':
+      [523, 659, 784].forEach((f, i) => {
+        tone(a, f, i * 0.12, 0.18, 'triangle', 0.07);
+      });
+      return;
+    case 'fail':
+      [330, 247].forEach((f, i) => {
+        tone(a, f, i * 0.2, 0.3, 'sawtooth', 0.04);
+      });
+      return;
   }
 }

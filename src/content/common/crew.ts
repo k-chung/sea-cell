@@ -1,7 +1,7 @@
 // Astronaut traits and the name pool for generated astronauts.
 // A trait boosts crisis options tagged with its skill, and can unlock blue options.
 
-import type { TraitDef } from './types.ts';
+import type { TraitDef } from '../types.ts';
 
 export const traits: TraitDef[] = [
   {

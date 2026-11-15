@@ -1,6 +1,6 @@
 {
- "rulesetId": "cell",
- "seed": 303,
+ "rulesetId": "space-race",
+ "seed": 101,
  "options": {
   "storyMode": false
  },
@@ -12,10 +12,14 @@
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "javelin",
-    "upper": "vanguard-2",
+    "booster": "titanus",
+    "upper": "agile",
     "payload": "beacon"
    }
+  },
+  {
+   "type": "chooseOption",
+   "index": 2
   },
   {
    "type": "continue"
@@ -33,32 +37,17 @@
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "javelin",
-    "upper": "vanguard-2",
+    "booster": "titanus",
+    "upper": "agile",
     "payload": "pilgrim"
    }
   },
   {
-   "type": "chooseOption",
+   "type": "continue"
+  },
+  {
+   "type": "chooseReward",
    "index": 1
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "chooseReward",
-   "index": 0
-  },
-  {
-   "type": "program",
-   "program": "research"
-  },
-  {
-   "type": "chooseReward",
-   "index": 2
-  },
-  {
-   "type": "continue"
   },
   {
    "type": "launch",
@@ -68,16 +57,76 @@
     "crew-2"
    ],
    "testFlight": true,
-   "redundancy": true,
+   "redundancy": false,
    "rocket": {
-    "booster": "colossus-5",
-    "upper": "vanguard-2",
+    "booster": "titanus",
+    "upper": "agile",
+    "payload": "tandem"
+   }
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "chooseReward",
+   "index": 1
+  },
+  {
+   "type": "launch",
+   "missionId": "docking",
+   "crewIds": [
+    "crew-1",
+    "crew-2"
+   ],
+   "testFlight": true,
+   "redundancy": false,
+   "rocket": {
+    "booster": "titanus",
+    "upper": "agile",
     "payload": "tandem"
    }
   },
   {
    "type": "chooseOption",
+   "index": 0
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "chooseReward",
+   "index": 0
+  },
+  {
+   "type": "program",
+   "program": "research"
+  },
+  {
+   "type": "chooseReward",
    "index": 1
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "launch",
+   "missionId": "lunarFlyby",
+   "crewIds": [
+    "crew-1",
+    "crew-2",
+    "crew-3"
+   ],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "colossus-5",
+    "upper": "agile",
+    "payload": "odyssey"
+   }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
   },
   {
    "type": "continue"
@@ -98,50 +147,6 @@
    "type": "continue"
   },
   {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-1",
-    "crew-2"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "colossus-5",
-    "upper": "agile",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "chooseReward",
-   "index": 0
-  },
-  {
-   "type": "program",
-   "program": "research"
-  },
-  {
-   "type": "chooseReward",
-   "index": 1
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "program",
-   "program": "research"
-  },
-  {
-   "type": "chooseReward",
-   "index": 1
-  },
-  {
-   "type": "continue"
-  },
-  {
    "type": "program",
    "program": "research"
   },
@@ -154,19 +159,19 @@
   },
   {
    "type": "launch",
-   "missionId": "lunarFlyby",
-   "crewIds": [
-    "crew-1",
-    "crew-2",
-    "crew-3"
-   ],
+   "missionId": "lunarProbe",
+   "crewIds": [],
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "colossus-5",
-    "upper": "centaurus",
-    "payload": "odyssey"
+    "booster": "colossus-1",
+    "upper": "vanguard-2",
+    "payload": "surveyor"
    }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
   },
   {
    "type": "continue"
@@ -182,17 +187,17 @@
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "colossus-5",
+    "booster": "colossus-1",
     "upper": "agile",
     "payload": "surveyor"
    }
   },
   {
-   "type": "continue"
+   "type": "chooseOption",
+   "index": 0
   },
   {
-   "type": "chooseReward",
-   "index": 0
+   "type": "continue"
   },
   {
    "type": "launch",
@@ -205,29 +210,7 @@
    "redundancy": true,
    "rocket": {
     "booster": "titanus",
-    "upper": "vanguard-2",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 1
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-1",
-    "crew-2"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "colossus-5",
-    "upper": "vanguard-2",
+    "upper": "agile",
     "payload": "tandem"
    }
   },
@@ -250,7 +233,7 @@
    "redundancy": true,
    "rocket": {
     "booster": "colossus-5",
-    "upper": "centaurus",
+    "upper": "vanguard-2",
     "payload": "odyssey"
    }
   },
@@ -259,33 +242,40 @@
   },
   {
    "type": "launch",
-   "missionId": "lunarProbe",
-   "crewIds": [],
+   "missionId": "lunarFlyby",
+   "crewIds": [
+    "crew-1",
+    "crew-2",
+    "crew-3"
+   ],
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "titanus",
-    "upper": "vanguard-2",
-    "payload": "surveyor"
+    "booster": "colossus-5",
+    "upper": "agile",
+    "payload": "odyssey"
    }
   },
   {
    "type": "chooseOption",
-   "index": 1
+   "index": 2
   },
   {
    "type": "continue"
   },
   {
    "type": "launch",
-   "missionId": "lunarProbe",
-   "crewIds": [],
+   "missionId": "docking",
+   "crewIds": [
+    "crew-1",
+    "crew-2"
+   ],
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "titanus",
+    "booster": "colossus-5",
     "upper": "vanguard-2",
-    "payload": "surveyor"
+    "payload": "tandem"
    }
   },
   {
@@ -297,18 +287,63 @@
   },
   {
    "type": "launch",
-   "missionId": "docking",
+   "missionId": "crewedOrbit",
    "crewIds": [
-    "crew-1",
-    "crew-2"
+    "crew-1"
    ],
    "testFlight": true,
    "redundancy": true,
    "rocket": {
     "booster": "javelin",
-    "upper": "centaurus",
+    "upper": "vanguard-2",
     "payload": "tandem"
    }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "launch",
+   "missionId": "lunarFlyby",
+   "crewIds": [
+    "crew-1",
+    "crew-2",
+    "crew-3"
+   ],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "colossus-5",
+    "upper": "agile",
+    "payload": "odyssey"
+   }
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "launch",
+   "missionId": "lunarFlyby",
+   "crewIds": [
+    "crew-1",
+    "crew-2",
+    "crew-3"
+   ],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "colossus-5",
+    "upper": "agile",
+    "payload": "odyssey"
+   }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
   },
   {
    "type": "continue"
@@ -320,28 +355,90 @@
    "testFlight": true,
    "redundancy": true,
    "rocket": {
-    "booster": "colossus-5",
-    "upper": "agile",
+    "booster": "titanus",
+    "upper": "vanguard-2",
     "payload": "surveyor"
    }
   },
   {
    "type": "chooseOption",
-   "index": 2
+   "index": 0
   },
   {
    "type": "continue"
   },
   {
    "type": "launch",
-   "missionId": "lunarProbe",
+   "missionId": "satellite",
    "crewIds": [],
    "testFlight": true,
    "redundancy": true,
    "rocket": {
     "booster": "colossus-5",
     "upper": "vanguard-2",
-    "payload": "surveyor"
+    "payload": "beacon"
+   }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "launch",
+   "missionId": "docking",
+   "crewIds": [
+    "crew-1",
+    "crew-2"
+   ],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "titanus",
+    "upper": "vanguard-2",
+    "payload": "tandem"
+   }
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "launch",
+   "missionId": "crewedOrbit",
+   "crewIds": [
+    "crew-1"
+   ],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "colossus-1",
+    "upper": "vanguard-2",
+    "payload": "pilgrim"
+   }
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "launch",
+   "missionId": "lunarFlyby",
+   "crewIds": [
+    "crew-1",
+    "crew-2",
+    "crew-3"
+   ],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "colossus-5",
+    "upper": "agile",
+    "payload": "odyssey"
    }
   },
   {
@@ -353,34 +450,34 @@
   }
  ],
  "expected": {
-  "turn": 18,
+  "turn": 21,
   "phase": "over",
-  "budget": 168,
-  "public": 98,
+  "budget": 45,
+  "public": 100,
   "congress": 95,
-  "prestige": 40,
+  "prestige": 52,
   "milestones": {
    "satellite": 0,
    "crewedOrbit": 1,
-   "spacewalk": 3,
-   "docking": 5,
-   "lunarFlyby": 9,
-   "lunarProbe": 10
+   "spacewalk": 2,
+   "docking": 3,
+   "lunarFlyby": 5,
+   "lunarProbe": 8
   },
   "rivalMilestones": {
    "satellite": 1,
-   "crewedOrbit": 3,
+   "crewedOrbit": 4,
    "spacewalk": 6,
-   "docking": 8,
-   "lunarProbe": 10,
-   "lunarFlyby": 14,
-   "moonLanding": 18
+   "docking": 9,
+   "lunarProbe": 12,
+   "lunarFlyby": 16,
+   "moonLanding": 21
   },
   "fallen": [],
   "outcome": {
    "won": false,
    "reason": "The Soviets reached First human on the Moon first."
   },
-  "rngState": -748810664
+  "rngState": -1140034348
  }
 }

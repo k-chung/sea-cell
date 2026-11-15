@@ -2,7 +2,14 @@
 // so typos in content files are caught immediately.
 
 import type {
-  EventDef, FavorDef, MilestoneDef, MissionDef, PartDef, PersonnelDef, Ruleset, TraitDef,
+  EventDef,
+  FavorDef,
+  MilestoneDef,
+  MissionDef,
+  PartDef,
+  PersonnelDef,
+  Ruleset,
+  TraitDef,
 } from '../content/types.ts';
 import type { Astronaut, GameState } from './state.ts';
 

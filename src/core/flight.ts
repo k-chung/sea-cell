@@ -10,11 +10,11 @@
 
 import type { FlightPhase, MissionResult, Ruleset } from '../content/types.ts';
 import type { Action } from './actions.ts';
-import type { GameState } from './state.ts';
-import { crewNames, previewLaunch } from './rocket.ts';
 import { crisisOptions, fillText, finalOdds, pickCrisisEvent } from './crisis.ts';
 import { getAstronaut, getEvent, getMilestone, getMission, getPart, getTrait } from './lookup.ts';
 import { pick, rollPercent } from './rng.ts';
+import { crewNames, previewLaunch } from './rocket.ts';
+import type { GameState } from './state.ts';
 import { endTurn } from './turn.ts';
 
 type LaunchAction = Extract<Action, { type: 'launch' }>;
@@ -34,8 +34,13 @@ export function launch(s: GameState, r: Ruleset, a: LaunchAction): void {
   const lines = [`${mission.name} launches on ${rocketName}.`];
   if (crewed) lines.push(`Crew: ${crewNames(s, a.crewIds).join(', ')}.`);
   s.flight = {
-    missionId: a.missionId, rocket: a.rocket, crewIds: a.crewIds,
-    testFlight: a.testFlight, redundancy: a.redundancy, lines, crisis: null,
+    missionId: a.missionId,
+    rocket: a.rocket,
+    crewIds: a.crewIds,
+    testFlight: a.testFlight,
+    redundancy: a.redundancy,
+    lines,
+    crisis: null,
   };
 
   // 1-2. Roll each phase until something fails.
@@ -71,9 +76,10 @@ export function launch(s: GameState, r: Ruleset, a: LaunchAction): void {
   if (s.forcedEventId) {
     const forced = getEvent(r, s.forcedEventId);
     eventId = forced.id;
-    crisisPhase = forced.phases === 'any'
-      ? (mission.phases[0] ?? 'launch')
-      : (mission.phases.find((p) => forced.phases.includes(p)) ?? mission.phases[0] ?? 'launch');
+    crisisPhase =
+      forced.phases === 'any'
+        ? (mission.phases[0] ?? 'launch')
+        : (mission.phases.find((p) => forced.phases.includes(p)) ?? mission.phases[0] ?? 'launch');
     s.forcedEventId = null;
   }
 
@@ -87,7 +93,8 @@ export function launch(s: GameState, r: Ruleset, a: LaunchAction): void {
   if (failedPhase) {
     // A failure with no matching crisis card: the flight simply fails.
     lines.push(`${label(failedPhase)}: failure.`);
-    return resolveMission(s, r, crewed ? 'abort' : 'lost');
+    resolveMission(s, r, crewed ? 'abort' : 'lost');
+    return;
   }
   resolveMission(s, r, 'success');
 }
@@ -147,9 +154,11 @@ export function resolveMission(s: GameState, r: Ruleset, result: MissionResult):
       s.congress += gainCongress;
       s.prestige += gainPrestige;
       s.rewardPending = true;
-      lines.push(rivalFirst
-        ? `SUCCESS: ${milestone.name}, but the Soviets did it first. (+${gainPublic} public, +${gainCongress} Congress, +${gainPrestige} prestige)`
-        : `WORLD FIRST: ${milestone.name}! (+${gainPublic} public, +${gainCongress} Congress, +${gainPrestige} prestige)`);
+      lines.push(
+        rivalFirst
+          ? `SUCCESS: ${milestone.name}, but the Soviets did it first. (+${gainPublic} public, +${gainCongress} Congress, +${gainPrestige} prestige)`
+          : `WORLD FIRST: ${milestone.name}! (+${gainPublic} public, +${gainCongress} Congress, +${gainPrestige} prestige)`,
+      );
     } else {
       s.public += b.repeatPublic;
       lines.push(`SUCCESS. Another flight in the books; parts and crew gain experience. (+${b.repeatPublic} public)`);
@@ -170,7 +179,9 @@ export function resolveMission(s: GameState, r: Ruleset, result: MissionResult):
   if (result === 'lost') {
     s.public += b.lostPublic;
     s.congress += b.lostCongress;
-    lines.push(`VEHICLE LOST.${crew.length ? ' The crew survived.' : ''} (${b.lostPublic} public, ${b.lostCongress} Congress)`);
+    lines.push(
+      `VEHICLE LOST.${crew.length ? ' The crew survived.' : ''} (${b.lostPublic} public, ${b.lostCongress} Congress)`,
+    );
   }
 
   if (result === 'disaster') {
@@ -185,9 +196,11 @@ export function resolveMission(s: GameState, r: Ruleset, result: MissionResult):
         s.fallen.push({ name: a.name, mission: mission.name, turn: s.turn });
       }
     }
-    lines.push(s.options.storyMode
-      ? `DISASTER. Story mode: the crew survive, badly injured (out for ${b.injuryTurns} turns). (${b.disasterPublic} public, ${b.disasterCongress} Congress)`
-      : `DISASTER. We lost ${crew.map((a) => a.name).join(', ')}. (${b.disasterPublic} public, ${b.disasterCongress} Congress)`);
+    lines.push(
+      s.options.storyMode
+        ? `DISASTER. Story mode: the crew survive, badly injured (out for ${b.injuryTurns} turns). (${b.disasterPublic} public, ${b.disasterCongress} Congress)`
+        : `DISASTER. We lost ${crew.map((a) => a.name).join(', ')}. (${b.disasterPublic} public, ${b.disasterCongress} Congress)`,
+    );
   }
 
   s.flight = null;

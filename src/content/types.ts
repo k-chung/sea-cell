@@ -199,10 +199,20 @@ export interface Content {
   astronautNames: string[];
 }
 
+/** An age of spaceflight. Each era is a content pack in src/content/eras/<era>/ and its own campaign. */
+export interface EraDef {
+  id: string;
+  name: string;
+  startYear: number;
+  endYear: number;
+  description: string;
+}
+
 /** A ruleset = which content + which numbers. Prototype variants are different rulesets. */
 export interface Ruleset {
   id: string;
   name: string;
+  era: EraDef;
   /** The final milestone. Reaching it wins; the rival reaching it first loses. */
   goalMilestone: string;
   content: Content;

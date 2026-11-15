@@ -28,7 +28,9 @@ export function button(opts: {
     opts.disabled ? 'disabled' : '',
     opts.pressed !== undefined ? `aria-pressed="${opts.pressed}"` : '',
     opts.title ? `title="${esc(opts.title)}"` : '',
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
   return `<button ${attrs}>${opts.label}</button>`;
 }
 

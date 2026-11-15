@@ -52,7 +52,8 @@ export function validateContent(r: Ruleset): string[] {
 
   const checkRequirement = (where: string, req: Requirement) => {
     if ('trait' in req && !traitIds.has(req.trait)) errors.push(`${where}: requires unknown trait "${req.trait}"`);
-    if ('personnel' in req && !personnelIds.has(req.personnel)) errors.push(`${where}: requires unknown personnel "${req.personnel}"`);
+    if ('personnel' in req && !personnelIds.has(req.personnel))
+      errors.push(`${where}: requires unknown personnel "${req.personnel}"`);
     if ('favor' in req && !favorIds.has(req.favor)) errors.push(`${where}: requires unknown favor "${req.favor}"`);
   };
 

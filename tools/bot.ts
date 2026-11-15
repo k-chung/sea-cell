@@ -5,24 +5,44 @@
 
 import type { Ruleset } from '../src/content/types.ts';
 import {
-  crisisOptions, lookup, missionStatus, previewLaunch, programOptions, testFlightCost,
-  type Action, type GameState, type LaunchPlan,
+  type Action,
+  crisisOptions,
+  type GameState,
+  type LaunchPlan,
+  lookup,
+  missionStatus,
+  previewLaunch,
+  programOptions,
+  testFlightCost,
 } from '../src/core/index.ts';
 
 const RESULT_SCORE = { success: 3, abort: 0.5, lost: -2, disaster: -6 } as const;
 
 const PART_PRIORITY = [
-  'odyssey-lander', 'colossus-5', 'odyssey', 'surveyor', 'colossus-1', 'hydra-4', 'centaurus', 'nova', 'thunderhead',
+  'odyssey-lander',
+  'colossus-5',
+  'odyssey',
+  'surveyor',
+  'colossus-1',
+  'hydra-4',
+  'centaurus',
+  'nova',
+  'thunderhead',
 ];
 const PERSONNEL_PRIORITY = ['calloway', 'hale', 'brandt', 'lin', 'webber', 'pallino'];
 
 export function botAction(s: GameState, r: Ruleset): Action {
   switch (s.phase) {
-    case 'plan': return planAction(s, r);
-    case 'crisis': return crisisAction(s, r);
-    case 'reward': return rewardAction(s);
-    case 'report': return { type: 'continue' };
-    case 'over': throw new Error('Game is over');
+    case 'plan':
+      return planAction(s, r);
+    case 'crisis':
+      return crisisAction(s, r);
+    case 'reward':
+      return rewardAction(s);
+    case 'report':
+      return { type: 'continue' };
+    case 'over':
+      throw new Error('Game is over');
   }
 }
 
@@ -68,7 +88,10 @@ function bestPlan(s: GameState, r: Ruleset, missionId: string, reserve: number):
     for (const upper of hand.filter((p) => p.slot === 'upper')) {
       for (const payload of hand.filter((p) => p.slot === 'payload')) {
         const base: LaunchPlan = {
-          missionId, crewIds, testFlight: false, redundancy: false,
+          missionId,
+          crewIds,
+          testFlight: false,
+          redundancy: false,
           rocket: { booster: booster.id, upper: upper.id, payload: payload.id },
         };
         const preview = previewLaunch(s, r, base);
@@ -112,7 +135,10 @@ function crisisAction(s: GameState, r: Ruleset): Action {
 function rewardAction(s: GameState): Action {
   const rank = (c: GameState['rewardChoices'][number]) => {
     if (c.kind === 'personnel') return PERSONNEL_PRIORITY.indexOf(c.id);
-    if (c.kind === 'part') { const i = PART_PRIORITY.indexOf(c.id); return i < 0 ? 50 : i + 2; }
+    if (c.kind === 'part') {
+      const i = PART_PRIORITY.indexOf(c.id);
+      return i < 0 ? 50 : i + 2;
+    }
     return c.id === 'windfall' ? 5 : 60;
   };
   let best = 0;

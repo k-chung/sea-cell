@@ -1,7 +1,7 @@
 // Key personnel (passive bonuses) and political favors, offered as rewards.
 // Names are lightly fictionalized.
 
-import type { FavorDef, PersonnelDef } from './types.ts';
+import type { FavorDef, PersonnelDef } from '../../types.ts';
 
 export const personnel: PersonnelDef[] = [
   {

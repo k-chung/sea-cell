@@ -2,6 +2,9 @@
 
 Plain-English notes on each playable version. Newest first.
 
+## Unreleased: Module 0 (groundwork for the card-based redesign)
+- No gameplay changes. Content reorganized by era; art layer; Biome lint/format; slimmer CLAUDE.md + docs.
+
 ## v0.2 "worm": the Mission Control look
 - New look: a Mission Control CRT console on one fixed screen (status bar, vehicle, missions, race and crew).
 - Pixel sprites: your rocket is drawn from the parts you pick; every astronaut has a portrait; a Soviet emblem.

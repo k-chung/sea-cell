@@ -1,8 +1,8 @@
 // Creating astronauts. Names come from content/crew.ts; each gets one random trait.
 
 import type { Ruleset } from '../content/types.ts';
-import type { Astronaut, GameState } from './state.ts';
 import { pick } from './rng.ts';
+import type { Astronaut, GameState } from './state.ts';
 
 export function recruitAstronaut(s: GameState, r: Ruleset): Astronaut {
   const used = new Set(s.crew.map((a) => a.name));

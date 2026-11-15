@@ -1,7 +1,7 @@
 // Play one full run with the bot. Shared by the balance bot and the golden-replay recorder.
 
 import type { Ruleset } from '../src/content/types.ts';
-import { createGame, step, type Action, type GameState } from '../src/core/index.ts';
+import { type Action, createGame, type GameState, step } from '../src/core/index.ts';
 import { botAction } from './bot.ts';
 
 export interface BotRun {

@@ -2,8 +2,8 @@
 // If you change the shape of this state, bump STATE_VERSION (saves are action logs, so old saves
 // simply replay; a version bump tells the UI an old save may not replay cleanly).
 
-import type { RngState } from './rng.ts';
 import type { MissionResult } from '../content/types.ts';
+import type { RngState } from './rng.ts';
 
 export const STATE_VERSION = 1;
 

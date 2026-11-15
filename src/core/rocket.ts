@@ -3,8 +3,8 @@
 // you see is exactly what gets rolled.
 
 import type { FlightPhase, MissionDef, Ruleset, Slot } from '../content/types.ts';
-import type { GameState, RocketChoice } from './state.ts';
 import { getAstronaut, getMilestone, getMission, getPart, getPersonnel, personnelBonus } from './lookup.ts';
+import type { GameState, RocketChoice } from './state.ts';
 
 /** Which part slot handles each flight phase. */
 export const PHASE_SLOT: Record<FlightPhase, Slot> = {
@@ -47,25 +47,27 @@ export function partReliability(s: GameState, r: Ruleset, partId: string): numbe
   const flights = s.partFlights[partId] ?? 0;
   const experience = Math.min(flights * r.balance.reliabilityPerFlight, r.balance.maxFlightBonus);
   const staff =
-    part.slot === 'booster' ? personnelBonus(s, r, 'boosterReliability')
-    : part.slot === 'upper' ? personnelBonus(s, r, 'upperReliability')
-    : personnelBonus(s, r, 'payloadReliability');
+    part.slot === 'booster'
+      ? personnelBonus(s, r, 'boosterReliability')
+      : part.slot === 'upper'
+        ? personnelBonus(s, r, 'upperReliability')
+        : personnelBonus(s, r, 'payloadReliability');
   return part.reliability + experience + staff;
 }
 
 export function testFlightCost(s: GameState, r: Ruleset): number {
-  const multiplier = s.personnel.reduce(
-    (m, id) => m * (getPersonnel(r, id).testFlightCostMultiplier ?? 1), 1);
+  const multiplier = s.personnel.reduce((m, id) => m * (getPersonnel(r, id).testFlightCostMultiplier ?? 1), 1);
   return Math.round(r.balance.testFlightCost * multiplier);
 }
 
 /** Is a mission flyable (requirements met)? Already-reached missions can be flown again. */
-export function missionStatus(s: GameState, r: Ruleset, mission: MissionDef):
-  { status: 'done' | 'available' | 'locked'; missing: string[] } {
+export function missionStatus(
+  s: GameState,
+  r: Ruleset,
+  mission: MissionDef,
+): { status: 'done' | 'available' | 'locked'; missing: string[] } {
   if (s.milestones[mission.milestone] !== undefined) return { status: 'done', missing: [] };
-  const missing = mission.requires
-    .filter((id) => s.milestones[id] === undefined)
-    .map((id) => getMilestone(r, id).name);
+  const missing = mission.requires.filter((id) => s.milestones[id] === undefined).map((id) => getMilestone(r, id).name);
   return { status: missing.length ? 'locked' : 'available', missing };
 }
 
@@ -81,7 +83,11 @@ export function previewLaunch(s: GameState, r: Ruleset, plan: LaunchPlan): Launc
   const booster = getPart(r, plan.rocket.booster);
   const upper = getPart(r, plan.rocket.upper);
   const payload = getPart(r, plan.rocket.payload);
-  for (const [part, slot] of [[booster, 'booster'], [upper, 'upper'], [payload, 'payload']] as const) {
+  for (const [part, slot] of [
+    [booster, 'booster'],
+    [upper, 'upper'],
+    [payload, 'payload'],
+  ] as const) {
     if (part.slot !== slot) problems.push(`${part.name} is not a ${slot}`);
     if (!s.hand.includes(part.id)) problems.push(`${part.name} is not in your hand this turn`);
   }
@@ -107,9 +113,12 @@ export function previewLaunch(s: GameState, r: Ruleset, plan: LaunchPlan): Launc
   }
 
   // Cost.
-  const cost = booster.cost + upper.cost + payload.cost
-    + (plan.testFlight ? testFlightCost(s, r) : 0)
-    + (plan.redundancy ? b.redundancyCost : 0);
+  const cost =
+    booster.cost +
+    upper.cost +
+    payload.cost +
+    (plan.testFlight ? testFlightCost(s, r) : 0) +
+    (plan.redundancy ? b.redundancyCost : 0);
   if (cost > s.budget) problems.push(`Costs ${cost}, budget is ${s.budget}`);
 
   // Synergies.

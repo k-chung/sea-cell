@@ -4,7 +4,7 @@
 // Results: success (objective met), abort (crew safe, no objective), lost (vehicle lost, crew escape),
 // disaster (vehicle and crew lost). Blue options (with `requires`) only show when you qualify.
 
-import type { EventDef } from './types.ts';
+import type { EventDef } from '../../types.ts';
 
 export const events: EventDef[] = [
   // ---------------- Launch ----------------

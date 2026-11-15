@@ -31,7 +31,9 @@ export function renderDevPanel(opts: {
 }): string {
   const { state: s, run, ruleset: r, pendingOverrides } = opts;
   const notes = loadNotes();
-  const events = r.content.events.map((e) => `<option value="${esc(e.id)}">${esc(e.title)} (${esc(e.severity)})</option>`).join('');
+  const events = r.content.events
+    .map((e) => `<option value="${esc(e.id)}">${esc(e.title)} (${esc(e.severity)})</option>`)
+    .join('');
   const sliders = SLIDERS.map(({ key, min, max, step }) => {
     const value = pendingOverrides[key] ?? r.balance[key];
     const changed = pendingOverrides[key] !== undefined ? ' *' : '';
@@ -39,9 +41,10 @@ export function renderDevPanel(opts: {
       <input type="range" min="${min}" max="${max}" step="${step}" value="${esc(value)}" data-act="slider" data-arg="${esc(key)}"></label>`;
   }).join('');
 
-  const runInfo = s && run
-    ? `<p>Seed <b>${s.seed}</b> · turn ${s.turn + 1} · phase ${esc(s.phase)} · ${run.actions.length} actions · ruleset ${esc(r.id)}</p>`
-    : '<p>No run in progress.</p>';
+  const runInfo =
+    s && run
+      ? `<p>Seed <b>${s.seed}</b> · turn ${s.turn + 1} · phase ${esc(s.phase)} · ${run.actions.length} actions · ruleset ${esc(r.id)}</p>`
+      : '<p>No run in progress.</p>';
 
   return `
   <aside class="dev" aria-label="Developer panel">

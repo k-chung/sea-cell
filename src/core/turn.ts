@@ -3,12 +3,12 @@
 
 import type { Ruleset } from '../content/types.ts';
 import type { ProgramAction } from './actions.ts';
-import type { GameState, RewardChoice } from './state.ts';
 import { recruitAstronaut } from './astronauts.ts';
 import { dateLabel } from './calendar.ts';
 import { getFavor, getMilestone, getPart, getPersonnel, personnelBonus } from './lookup.ts';
 import { advanceRival } from './rival.ts';
 import { shuffle } from './rng.ts';
+import type { GameState, RewardChoice } from './state.ts';
 
 // ---------------------------------------------------------------- start of turn
 
@@ -22,10 +22,16 @@ export function drawHand(s: GameState, r: Ruleset): void {
   const unlocked = s.unlockedParts.map((id) => getPart(r, id));
   const hand: string[] = [];
   for (const slot of ['booster', 'upper', 'payload'] as const) {
-    const options = shuffle(s.rng, unlocked.filter((p) => p.slot === slot));
+    const options = shuffle(
+      s.rng,
+      unlocked.filter((p) => p.slot === slot),
+    );
     if (options[0]) hand.push(options[0].id);
   }
-  const rest = shuffle(s.rng, unlocked.filter((p) => !hand.includes(p.id)));
+  const rest = shuffle(
+    s.rng,
+    unlocked.filter((p) => !hand.includes(p.id)),
+  );
   for (const p of rest) {
     if (hand.length >= r.balance.handSize) break;
     hand.push(p.id);
@@ -133,27 +139,37 @@ export function programOptions(s: GameState, r: Ruleset): ProgramView[] {
   const afford = (cost: number) => (s.budget >= cost ? null : `Needs ${cost} budget`);
   return [
     {
-      program: 'research', label: 'Research', cost: b.researchCost,
+      program: 'research',
+      label: 'Research',
+      cost: b.researchCost,
       detail: `Pick 1 of ${b.researchChoices} new part cards to unlock.`,
       blockedReason: locked.length ? afford(b.researchCost) : 'Every part is already unlocked',
     },
     {
-      program: 'lobby', label: 'Lobby Congress', cost: 0,
+      program: 'lobby',
+      label: 'Lobby Congress',
+      cost: 0,
       detail: `+${b.lobbyCongress} Congress, ${b.lobbyPublic} public (backroom deals).`,
       blockedReason: null,
     },
     {
-      program: 'pr', label: 'PR tour', cost: b.prCost,
+      program: 'pr',
+      label: 'PR tour',
+      cost: b.prCost,
       detail: `+${b.prPublic} public.`,
       blockedReason: afford(b.prCost),
     },
     {
-      program: 'recruit', label: 'Recruit astronaut', cost: b.recruitCost,
+      program: 'recruit',
+      label: 'Recruit astronaut',
+      cost: b.recruitCost,
       detail: 'Add a new astronaut with a random trait.',
       blockedReason: afford(b.recruitCost),
     },
     {
-      program: 'wait', label: 'Save money', cost: 0,
+      program: 'wait',
+      label: 'Save money',
+      cost: 0,
       detail: 'Do nothing; keep the budget for a bigger rocket.',
       blockedReason: null,
     },
@@ -180,16 +196,20 @@ export function runProgram(s: GameState, r: Ruleset, program: ProgramAction): vo
     case 'lobby':
       s.congress += b.lobbyCongress;
       s.public += b.lobbyPublic;
-      return endTurn(s, r, [`You work the halls of Congress (+${b.lobbyCongress} Congress, ${b.lobbyPublic} public).`]);
+      endTurn(s, r, [`You work the halls of Congress (+${b.lobbyCongress} Congress, ${b.lobbyPublic} public).`]);
+      return;
     case 'pr':
       s.public += b.prPublic;
-      return endTurn(s, r, [`Astronauts tour the country (+${b.prPublic} public).`]);
+      endTurn(s, r, [`Astronauts tour the country (+${b.prPublic} public).`]);
+      return;
     case 'recruit': {
       const a = recruitAstronaut(s, r);
-      return endTurn(s, r, [`New astronaut: ${a.name}.`]);
+      endTurn(s, r, [`New astronaut: ${a.name}.`]);
+      return;
     }
     case 'wait':
-      return endTurn(s, r, ['You hold the budget for something bigger.']);
+      endTurn(s, r, ['You hold the budget for something bigger.']);
+      return;
   }
 }
 
@@ -197,12 +217,18 @@ export function runProgram(s: GameState, r: Ruleset, program: ProgramAction): vo
 
 /** Pick 1 of N after a first: try to offer one person, one part and one favor. */
 export function milestoneRewardChoices(s: GameState, r: Ruleset): RewardChoice[] {
-  const people = shuffle(s.rng, r.content.personnel.filter((p) => !s.personnel.includes(p.id)))
-    .map((p) => ({ kind: 'personnel' as const, id: p.id }));
-  const parts = shuffle(s.rng, r.content.parts.filter((p) => !s.unlockedParts.includes(p.id)))
-    .map((p) => ({ kind: 'part' as const, id: p.id }));
-  const favors = shuffle(s.rng, r.content.favors.filter((f) => f.instant || !s.favors.includes(f.id)))
-    .map((f) => ({ kind: 'favor' as const, id: f.id }));
+  const people = shuffle(
+    s.rng,
+    r.content.personnel.filter((p) => !s.personnel.includes(p.id)),
+  ).map((p) => ({ kind: 'personnel' as const, id: p.id }));
+  const parts = shuffle(
+    s.rng,
+    r.content.parts.filter((p) => !s.unlockedParts.includes(p.id)),
+  ).map((p) => ({ kind: 'part' as const, id: p.id }));
+  const favors = shuffle(
+    s.rng,
+    r.content.favors.filter((f) => f.instant || !s.favors.includes(f.id)),
+  ).map((f) => ({ kind: 'favor' as const, id: f.id }));
 
   const choices: RewardChoice[] = [];
   for (const pool of [people, parts, favors]) {

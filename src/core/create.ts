@@ -1,9 +1,9 @@
 // Start a new run: check the content, build the starting state, recruit crew, deal the first hand.
 
 import type { Ruleset } from '../content/types.ts';
-import { STATE_VERSION, type GameOptions, type GameState } from './state.ts';
-import { createRng } from './rng.ts';
 import { recruitAstronaut } from './astronauts.ts';
+import { createRng } from './rng.ts';
+import { type GameOptions, type GameState, STATE_VERSION } from './state.ts';
 import { drawHand } from './turn.ts';
 import { validateContent } from './validateContent.ts';
 

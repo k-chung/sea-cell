@@ -1,12 +1,14 @@
 // E2E smoke tests: a real browser plays the built game. Run: npm run e2e
 // They check that every screen works end to end, not the rules (unit tests cover those).
 
-import { expect, test, type Page } from '@playwright/test';
+import { expect, type Page, test } from '@playwright/test';
 
 /** Collect console errors and page crashes; each test ends by expecting none. */
 function watchErrors(page: Page): string[] {
   const errors: string[] = [];
-  page.on('console', (m) => { if (m.type() === 'error') errors.push(m.text()); });
+  page.on('console', (m) => {
+    if (m.type() === 'error') errors.push(m.text());
+  });
   page.on('pageerror', (e) => errors.push(e.message));
   return errors;
 }

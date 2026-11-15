@@ -3,8 +3,8 @@
 
 import type { Ruleset } from '../content/types.ts';
 import type { Action } from './actions.ts';
-import type { GameOptions, GameState } from './state.ts';
 import { createGame } from './create.ts';
+import type { GameOptions, GameState } from './state.ts';
 import { step } from './step.ts';
 
 export interface RunRecord {
