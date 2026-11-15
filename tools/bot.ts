@@ -6,13 +6,14 @@
 import type { Ruleset } from '../src/content/types.ts';
 import {
   type Action,
+  type CardView,
   crisisOptions,
   type GameState,
   type LaunchPlan,
   lookup,
   missionStatus,
+  offerViews,
   previewLaunch,
-  programOptions,
   testFlightCost,
 } from '../src/core/index.ts';
 
@@ -47,36 +48,66 @@ export function botAction(s: GameState, r: Ruleset): Action {
 }
 
 function planAction(s: GameState, r: Ruleset): Action {
-  const newMissions = r.content.missions.filter((m) => missionStatus(s, r, m).status === 'available');
-  for (const mission of newMissions) {
+  // 1. Play the most useful affordable card, if any is worth it.
+  let bestIndex = -1;
+  let bestScore = 0;
+  offerViews(s, r).forEach((v, i) => {
+    const score = cardScore(s, r, v);
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = i;
+    }
+  });
+  if (bestIndex >= 0) return { type: 'playCard', index: bestIndex };
+
+  // 2. Launch toward the next milestone.
+  for (const mission of r.content.missions.filter((m) => missionStatus(s, r, m).status === 'available')) {
     const plan = bestPlan(s, r, mission.id, 15);
     if (plan) return { type: 'launch', ...plan };
   }
-
-  const programs = programOptions(s, r);
-  const can = (p: string) => programs.some((x) => x.program === p && !x.blockedReason);
-  if (s.public < 30 && can('pr')) return { type: 'program', program: 'pr' };
-  if (s.congress < 30) return { type: 'program', program: 'lobby' };
-  const readyCrew = s.crew.filter((a) => a.status === 'ready').length;
-  if (readyCrew < 3 && can('recruit')) return { type: 'program', program: 'recruit' };
-  const missingBigParts = PART_PRIORITY.slice(0, 4).some((id) => !s.unlockedParts.includes(id));
-  if (missingBigParts && can('research') && s.budget >= 40) return { type: 'program', program: 'research' };
-
-  // Fly something already reached to avoid the idle penalty and build reliability, if rich.
+  // 3. If rich, fly a reached mission again (avoids the idle penalty, builds reliability).
   if (s.budget > 70) {
-    const repeats = r.content.missions.filter((m) => missionStatus(s, r, m).status === 'done');
-    for (const mission of repeats.reverse()) {
+    for (const mission of r.content.missions.filter((m) => missionStatus(s, r, m).status === 'done').reverse()) {
       const plan = bestPlan(s, r, mission.id, 40);
       if (plan) return { type: 'launch', ...plan };
     }
   }
-  return { type: 'program', program: 'wait' };
+  return { type: 'endTurn' };
+}
+
+/** How much the bot wants a card (0 = skip it). Keeps a budget reserve for launches. */
+function cardScore(s: GameState, r: Ruleset, v: CardView): number {
+  if (v.blockedReason) return 0;
+  const affordable = s.budget - v.cost >= 20;
+  switch (v.card.kind) {
+    case 'part': {
+      const i = PART_PRIORITY.indexOf(v.card.id);
+      return i >= 0 && s.budget >= v.cost ? 20 - i : 0;
+    }
+    case 'staff':
+      return affordable ? 6 : 0;
+    case 'astronaut':
+      return s.crew.filter((a) => a.status === 'ready').length < 3 && affordable ? 8 : 0;
+    case 'program': {
+      if (!affordable) return 0;
+      const def = r.content.programCards.find((c) => c.id === v.card.id);
+      let score = 0;
+      for (const e of def?.effects ?? []) {
+        if (e.kind === 'public' && s.public < 45) score += e.amount;
+        if (e.kind === 'congress' && s.congress < 45) score += e.amount;
+        if (e.kind === 'budget' && s.budget < 40) score += e.amount / 3;
+        if (e.kind === 'nextLaunchBonus') score += e.amount / 2;
+        if (e.kind === 'public' && e.amount < 0 && s.public < 30) score -= 10;
+      }
+      return score;
+    }
+  }
 }
 
 /** The most reliable affordable rocket from the current hand, keeping `reserve` budget if possible. */
 function bestPlan(s: GameState, r: Ruleset, missionId: string, reserve: number): LaunchPlan | null {
   const mission = lookup.getMission(r, missionId);
-  const hand = s.hand.map((id) => lookup.getPart(r, id));
+  const hand = s.unlockedParts.map((id) => lookup.getPart(r, id));
   const crewIds = s.crew
     .filter((a) => a.status === 'ready')
     .sort((a, b) => b.flights - a.flights)

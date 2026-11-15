@@ -2,9 +2,8 @@
 // (rival moves, support drifts, injuries heal, win/lose checks).
 
 import type { Ruleset } from '../content/types.ts';
-import type { ProgramAction } from './actions.ts';
-import { recruitAstronaut } from './astronauts.ts';
 import { dateLabel } from './calendar.ts';
+import { dealCards } from './cards.ts';
 import { getFavor, getMilestone, getPart, getPersonnel, personnelBonus } from './lookup.ts';
 import { advanceRival } from './rival.ts';
 import { shuffle } from './rng.ts';
@@ -17,28 +16,6 @@ export function income(s: GameState, r: Ruleset): number {
   return Math.round(b.baseIncome + s.congress * b.incomePerCongress + personnelBonus(s, r, 'income'));
 }
 
-/** Deal a new hand: one card per slot guaranteed, the rest random from unlocked parts. */
-export function drawHand(s: GameState, r: Ruleset): void {
-  const unlocked = s.unlockedParts.map((id) => getPart(r, id));
-  const hand: string[] = [];
-  for (const slot of ['booster', 'upper', 'payload'] as const) {
-    const options = shuffle(
-      s.rng,
-      unlocked.filter((p) => p.slot === slot),
-    );
-    if (options[0]) hand.push(options[0].id);
-  }
-  const rest = shuffle(
-    s.rng,
-    unlocked.filter((p) => !hand.includes(p.id)),
-  );
-  for (const p of rest) {
-    if (hand.length >= r.balance.handSize) break;
-    hand.push(p.id);
-  }
-  s.hand = hand;
-}
-
 export function startNextTurn(s: GameState, r: Ruleset): void {
   s.turn += 1;
   s.budget += income(s, r);
@@ -48,7 +25,10 @@ export function startNextTurn(s: GameState, r: Ruleset): void {
   s.report = [];
   s.rewardChoices = [];
   s.rewardSource = null;
-  drawHand(s, r);
+  s.actions = r.balance.actionsPerTurn + s.actionsNextTurn;
+  s.actionsNextTurn = 0;
+  s.offer = [];
+  dealCards(s, r, r.balance.offerSize);
   s.phase = 'plan';
 }
 
@@ -86,8 +66,9 @@ export function endTurn(s: GameState, r: Ruleset, lines: string[]): void {
   if (!s.outcome) s.outcome = checkLoss(s, r);
   if (s.outcome) lines.push(s.outcome.won ? `VICTORY. ${s.outcome.reason}` : `PROGRAM ENDED. ${s.outcome.reason}`);
 
-  s.report = lines;
-  s.history.push(...lines.map((l) => `${dateLabel(r, s.turn)}: ${l}`));
+  // Cards played this turn are already in the report; the turn's outcome follows them.
+  s.report = [...s.report, ...lines];
+  s.history.push(...s.report.map((l) => `${dateLabel(r, s.turn)}: ${l}`));
   s.phase = 'report';
 }
 
@@ -120,97 +101,6 @@ export function continueAfterReport(s: GameState, r: Ruleset): void {
     }
   }
   startNextTurn(s, r);
-}
-
-// ---------------------------------------------------------------- program actions
-
-export interface ProgramView {
-  program: ProgramAction;
-  label: string;
-  detail: string;
-  cost: number;
-  /** null = allowed; otherwise why not. */
-  blockedReason: string | null;
-}
-
-export function programOptions(s: GameState, r: Ruleset): ProgramView[] {
-  const b = r.balance;
-  const locked = r.content.parts.filter((p) => !s.unlockedParts.includes(p.id));
-  const afford = (cost: number) => (s.budget >= cost ? null : `Needs ${cost} budget`);
-  return [
-    {
-      program: 'research',
-      label: 'Research',
-      cost: b.researchCost,
-      detail: `Pick 1 of ${b.researchChoices} new part cards to unlock.`,
-      blockedReason: locked.length ? afford(b.researchCost) : 'Every part is already unlocked',
-    },
-    {
-      program: 'lobby',
-      label: 'Lobby Congress',
-      cost: 0,
-      detail: `+${b.lobbyCongress} Congress, ${b.lobbyPublic} public (backroom deals).`,
-      blockedReason: null,
-    },
-    {
-      program: 'pr',
-      label: 'PR tour',
-      cost: b.prCost,
-      detail: `+${b.prPublic} public.`,
-      blockedReason: afford(b.prCost),
-    },
-    {
-      program: 'recruit',
-      label: 'Recruit astronaut',
-      cost: b.recruitCost,
-      detail: 'Add a new astronaut with a random trait.',
-      blockedReason: afford(b.recruitCost),
-    },
-    {
-      program: 'wait',
-      label: 'Save money',
-      cost: 0,
-      detail: 'Do nothing; keep the budget for a bigger rocket.',
-      blockedReason: null,
-    },
-  ];
-}
-
-export function runProgram(s: GameState, r: Ruleset, program: ProgramAction): void {
-  const view = programOptions(s, r).find((p) => p.program === program);
-  if (!view) throw new Error(`Unknown program action "${program}"`);
-  if (view.blockedReason) throw new Error(`Can't ${view.label}: ${view.blockedReason}`);
-  const b = r.balance;
-  s.budget -= view.cost;
-
-  switch (program) {
-    case 'research': {
-      const locked = r.content.parts.filter((p) => !s.unlockedParts.includes(p.id));
-      s.rewardChoices = shuffle(s.rng, locked)
-        .slice(0, b.researchChoices)
-        .map((p) => ({ kind: 'part' as const, id: p.id }));
-      s.rewardSource = 'research';
-      s.phase = 'reward';
-      return; // the turn ends after the pick
-    }
-    case 'lobby':
-      s.congress += b.lobbyCongress;
-      s.public += b.lobbyPublic;
-      endTurn(s, r, [`You work the halls of Congress (+${b.lobbyCongress} Congress, ${b.lobbyPublic} public).`]);
-      return;
-    case 'pr':
-      s.public += b.prPublic;
-      endTurn(s, r, [`Astronauts tour the country (+${b.prPublic} public).`]);
-      return;
-    case 'recruit': {
-      const a = recruitAstronaut(s, r);
-      endTurn(s, r, [`New astronaut: ${a.name}.`]);
-      return;
-    }
-    case 'wait':
-      endTurn(s, r, ['You hold the budget for something bigger.']);
-      return;
-  }
 }
 
 // ---------------------------------------------------------------- rewards
@@ -262,7 +152,6 @@ export function rewardLabel(r: Ruleset, c: RewardChoice): { title: string; detai
 
 /** index -1 = skip. */
 export function chooseReward(s: GameState, r: Ruleset, index: number): void {
-  const source = s.rewardSource;
   const lines: string[] = [];
   if (index >= 0) {
     const choice = s.rewardChoices[index];
@@ -275,11 +164,7 @@ export function chooseReward(s: GameState, r: Ruleset, index: number): void {
   s.rewardChoices = [];
   s.rewardSource = null;
 
-  if (source === 'research') {
-    endTurn(s, r, [`Research: ${lines[0]}`]);
-  } else {
-    startNextTurn(s, r);
-  }
+  startNextTurn(s, r);
 }
 
 function applyReward(s: GameState, r: Ruleset, c: RewardChoice): void {

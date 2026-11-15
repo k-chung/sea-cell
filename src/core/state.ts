@@ -2,14 +2,14 @@
 // If you change the shape of this state, bump STATE_VERSION (saves are action logs, so old saves
 // simply replay; a version bump tells the UI an old save may not replay cleanly).
 
-import type { MissionResult } from '../content/types.ts';
+import type { CardRef, MissionResult } from '../content/types.ts';
 import type { RngState } from './rng.ts';
 
-export const STATE_VERSION = 1;
+export const STATE_VERSION = 2;
 
 /** Which screen the run is on. */
 export type GamePhase =
-  | 'plan' // choose a mission (and build a rocket) or a program action
+  | 'plan' // play cards, then launch a mission or end the turn
   | 'crisis' // a crisis card is waiting for a choice
   | 'reward' // pick 1 of N rewards (after a first, or from research)
   | 'report' // what happened this turn; press continue
@@ -70,8 +70,16 @@ export interface GameState {
 
   unlockedParts: string[];
   /** Successful flights per part id; each makes the part more reliable. */
+  /** Successful flights per part id; each makes the part more reliable. */
   partFlights: Record<string, number>;
-  hand: string[];
+  /** Action points left this turn (spent by playing cards). */
+  actions: number;
+  /** Extra action points next turn (from cards like Crunch Time). */
+  actionsNextTurn: number;
+  /** Cards dealt this turn that haven't been played. */
+  offer: CardRef[];
+  /** Added to every phase's reliability on the next launch, then reset. */
+  nextLaunchBonus: number;
 
   crew: Astronaut[];
   nextCrewNumber: number;
@@ -98,7 +106,7 @@ export interface GameState {
   rewardPending: boolean;
   rewardChoices: RewardChoice[];
   /** Why the reward screen is open: a milestone reward, or a research pick. */
-  rewardSource: 'milestone' | 'research' | null;
+  rewardSource: 'milestone' | null;
 
   /** All past report lines, newest last. */
   history: string[];

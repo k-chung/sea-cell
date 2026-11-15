@@ -2,6 +2,23 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-15 — Phone + PC with minimal friction (owner directive)
+One stable hosted link (latest), no hover-only info, 44px touch targets, sidebar collapsed on phones,
+"Send as idea" turns a playtest note into a prefilled GitHub issue (replay data inline if under ~5 KB,
+otherwise copied to the clipboard). E2E plays a full run on an emulated phone with touch.
+
+## 2026-11-15 — Module 1: cards and planning
+- **No git tags** (owner): friction without value now; hosted links + merged PRs preserve versions.
+- **Parts are acquired, not dealt per turn.** Part cards appear in the random offer; owned parts can always
+  be used. Randomness moves to what you can get. Risk: too easy. Bot measured it: 99% wins at first, so
+  acquiring costs 4x the part's flight cost (`partCostMultiplier`), base income 18 -> 12, rival speed
+  1.25 -> 1.45. Bot now wins ~34% (v0.1 bot: ~15%). Placeholder until playtests.
+- **Research/lobby/PR/recruit became cards**; the offer always includes at least one free card.
+- **Effects are a fixed list** (budget, public, congress, prestige, actionsNextTurn, nextLaunchBonus,
+  drawCards), each unit-tested, handled in `src/core/cards.ts`. No effect scripting.
+- **Preact 10.29.8** (runtime dep, ~4 KB): components instead of HTML strings. Session logic lives in
+  `src/ui/session.ts` (no UI code) so screens stay thin. State version 2: older saves won't load.
+
 ## 2026-11-15 — Pivot: card-based planning + flight loop (Module 0 groundwork)
 Owner direction: inspiration narrowed to Slay the Spire/FTL (random cards for managerial choices, parts,
 staff, astronauts) and The Last Stand/XCOM (planning phase, then a "combat" phase = the flight). Art must be

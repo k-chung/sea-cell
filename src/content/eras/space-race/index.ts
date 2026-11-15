@@ -7,6 +7,7 @@ import { events } from './events.ts';
 import { milestones, missions } from './missions.ts';
 import { parts } from './parts.ts';
 import { favors, personnel } from './people.ts';
+import { programCards } from './programs.ts';
 
 export const era: EraDef = {
   id: 'space-race',
@@ -16,5 +17,5 @@ export const era: EraDef = {
   description: 'Beat the Soviets to the Moon before Congress and the public lose faith.',
 };
 
-export const content: Content = { parts, milestones, missions, traits, events, personnel, favors, astronautNames };
+export const content: Content = { parts, programCards, milestones, missions, traits, events, personnel, favors, astronautNames };
 export { balance };

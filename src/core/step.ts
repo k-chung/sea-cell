@@ -4,10 +4,11 @@
 
 import type { Ruleset } from '../content/types.ts';
 import type { Action } from './actions.ts';
+import { playCard } from './cards.ts';
 import { chooseOption, launch } from './flight.ts';
 import { getEvent } from './lookup.ts';
 import type { GamePhase, GameState } from './state.ts';
-import { chooseReward, continueAfterReport, runProgram } from './turn.ts';
+import { chooseReward, continueAfterReport, endTurn } from './turn.ts';
 
 function expectPhase(s: GameState, phase: GamePhase, action: Action): void {
   if (s.phase !== phase) {
@@ -24,9 +25,13 @@ export function step(state: GameState, r: Ruleset, action: Action): GameState {
       expectPhase(s, 'plan', action);
       launch(s, r, action);
       break;
-    case 'program':
+    case 'playCard':
       expectPhase(s, 'plan', action);
-      runProgram(s, r, action.program);
+      s.report.push(playCard(s, r, action.index));
+      break;
+    case 'endTurn':
+      expectPhase(s, 'plan', action);
+      endTurn(s, r, []);
       break;
     case 'chooseOption':
       expectPhase(s, 'crisis', action);

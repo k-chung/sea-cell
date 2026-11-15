@@ -29,6 +29,7 @@ export function launch(s: GameState, r: Ruleset, a: LaunchAction): void {
   const crewed = mission.crewNeeded > 0;
   s.budget -= preview.cost;
   s.launchedThisTurn = true;
+  s.nextLaunchBonus = 0; // card bonuses apply to one launch (already in the preview odds)
 
   const rocketName = [a.rocket.booster, a.rocket.upper, a.rocket.payload].map((id) => getPart(r, id).name).join(' / ');
   const lines = [`${mission.name} launches on ${rocketName}.`];

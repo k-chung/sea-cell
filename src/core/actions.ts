@@ -3,8 +3,6 @@
 
 import type { RocketChoice } from './state.ts';
 
-export type ProgramAction = 'research' | 'lobby' | 'pr' | 'recruit' | 'wait';
-
 export type Action =
   | {
       type: 'launch';
@@ -14,7 +12,10 @@ export type Action =
       testFlight: boolean;
       redundancy: boolean;
     }
-  | { type: 'program'; program: ProgramAction }
+  /** Play a card from the offer (index into state.offer). */
+  | { type: 'playCard'; index: number }
+  /** End the planning phase without launching. */
+  | { type: 'endTurn' }
   | { type: 'chooseOption'; index: number }
   | { type: 'chooseReward'; index: number } // -1 = skip
   | { type: 'continue' }
