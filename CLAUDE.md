@@ -30,7 +30,7 @@ Keep one stable playable link: republish `dist-single/latest/sea-cell.html` afte
   Same seed + same actions = same result.
 - Content is data per era: `src/content/eras/<era>/`. Tuning numbers live in the era's `balance.ts`.
 - Systems are small modules switched on/off by the ruleset. Seams, not frameworks: build for features that exist.
-- Art goes through `src/ui/art.ts` only (named pieces like crew portrait, rocket), so the style can be swapped.
+- Art goes through `src/ui/art.tsx` only (named pieces like crew portrait, rocket), so the style can be swapped.
 - Plain, well-named code; a header comment per file; comment WHY. Small files. Delete dead code.
 - Minimal deps, each justified in `docs/decisions.md`. TypeScript strict. Biome lint/format must pass.
 - Edit files with targeted changes; avoid rewriting whole files.
