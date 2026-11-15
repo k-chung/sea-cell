@@ -19,6 +19,11 @@ Code map: `docs/ARCHITECTURE.md`. Read other docs only when the task needs them:
 - Decide small, ask big: ask before anything that changes how the game plays or feels, or expands scope.
   The owner's ideas outrank yours; flag conflicts with earlier decisions instead of picking silently.
 
+## Phone + PC (owner directive)
+The owner playtests and works from a phone. Every feature must be playable by tap on a phone and by
+mouse/keyboard on a PC, with the fewest steps: no hover-only information, 44px+ tap targets, E2E covers both.
+Keep one stable playable link: republish `dist-single/latest/sea-cell.html` after each module.
+
 ## Code rules (do not break)
 - Layers, one direction: `src/content` (data only) -> `src/core` (pure rules, no DOM, no deps) -> `src/ui`.
 - `step(state, action) -> state` is the only way the game changes. All randomness via the seeded RNG in state.

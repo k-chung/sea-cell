@@ -94,7 +94,7 @@ function MissionPicker({ s, r, draft, setDraft }: ScreenProps) {
               <b>{m.name}</b>
               <small>
                 lift {m.liftNeeded} · {m.crewNeeded ? `${m.crewNeeded} crew` : 'uncrewed'} ·{' '}
-                {st.status === 'done' ? 'done' : st.status === 'available' ? 'ready' : 'locked'}
+                {st.status === 'done' ? 'done' : st.status === 'available' ? 'ready' : `needs ${st.missing.join(', ')}`}
                 {rivalFirst && ' · Soviets first'}
               </small>
             </button>

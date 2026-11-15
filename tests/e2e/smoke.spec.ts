@@ -13,12 +13,10 @@ function watchErrors(page: Page): string[] {
   return errors;
 }
 
-test('a full run from title to game over', async ({ page }) => {
-  const errors = watchErrors(page);
+/** Play from the title screen to game over: one card, one satellite launch, then answer everything. */
+async function playFullRun(page: Page) {
   await page.goto('/?seed=777');
   await page.click('[data-act="new-run"]');
-
-  // Turn 1: play a card, then build and launch a satellite.
   await page.locator('[data-act="card"]:not([disabled])').first().click();
   await page.click('[data-act="mission"][data-arg="satellite"]');
   for (const slot of ['booster', 'upper', 'payload']) {
@@ -26,16 +24,40 @@ test('a full run from title to game over', async ({ page }) => {
   }
   const launch = page.locator('[data-act="launch"]');
   if (await launch.isEnabled()) await launch.click();
-
-  // Then answer whatever comes up until the run ends.
   for (let i = 0; i < 300 && !(await page.locator('main.phase-over').count()); i++) {
-    if (await page.locator('main.phase-crisis').count()) await page.keyboard.press('1');
-    else if (await page.locator('main.phase-reward').count()) await page.keyboard.press('1');
+    const options = page.locator('main.phase-crisis .options button, main.phase-reward .options button');
+    if (await options.count()) await options.first().click();
     else if (await page.locator('main.phase-report').count()) await page.click('[data-act="continue"]');
     else await page.click('[data-act="end-turn"]');
   }
   await expect(page.locator('main.phase-over .stamp')).toBeVisible();
+}
+
+test('PC: a full run from title to game over', async ({ page }) => {
+  const errors = watchErrors(page);
+  await playFullRun(page);
   expect(errors).toEqual([]);
+});
+
+test.describe('phone', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  test('a full run by tapping, with no sideways scrolling', async ({ page }) => {
+    const errors = watchErrors(page);
+    await playFullRun(page);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false);
+    expect(errors).toEqual([]);
+  });
+
+  test('a playtest note opens a prefilled idea issue', async ({ page }) => {
+    await page.goto('/?seed=777');
+    await page.click('[data-act="new-run"]');
+    await page.click('[data-act="note"]');
+    await page.fill('#note-text', 'Too many cards');
+    const href = await page.locator('[data-act="note-send"]').getAttribute('href');
+    expect(href).toContain('issues/new?template=idea.md');
+    expect(decodeURIComponent(href ?? '')).toContain('Too many cards');
+  });
 });
 
 test('the scene gallery renders every screen', async ({ page }) => {
@@ -43,13 +65,4 @@ test('the scene gallery renders every screen', async ({ page }) => {
   await page.goto('/gallery.html');
   await expect(page.locator('.scene')).toHaveCount(8);
   expect(errors).toEqual([]);
-});
-
-test('phone width: no sideways scrolling', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/?seed=777');
-  await page.click('[data-act="new-run"]');
-  await page.click('[data-act="mission"][data-arg="satellite"]');
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
-  expect(overflow).toBe(false);
 });

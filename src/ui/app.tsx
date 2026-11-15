@@ -14,6 +14,7 @@ import { applyAction, loadSession, makeReport, newSession, type Session, session
 import { play } from './sound.ts';
 import {
   addNote,
+  type FeedbackNote,
   loadBalanceOverrides,
   loadHall,
   loadSave,
@@ -159,14 +160,7 @@ export function App() {
           {error}
         </p>
       )}
-      {noteOpen && session && (
-        <NoteBox
-          onSave={(text) => {
-            if (text) addNote(makeReport(session, text));
-            setNoteOpen(false);
-          }}
-        />
-      )}
+      {noteOpen && session && <NoteBox makeNote={(text) => makeReport(session, text)} onDone={() => setNoteOpen(false)} />}
       {screen ?? (
         <TitleScreen
           storyMode={storyMode}
@@ -202,17 +196,57 @@ function playFor(action: Action, next: Session) {
   } else play(action.type === 'chooseOption' ? result : 'click');
 }
 
-function NoteBox({ onSave }: { onSave: (text: string) => void }) {
+const NEW_IDEA_URL = 'https://github.com/k-chung/sea-cell/issues/new?template=idea.md';
+
+/** A prefilled GitHub idea issue with the note and (if it fits in a link) the replay data. */
+function ideaLink(note: FeedbackNote): { href: string; replayInLink: boolean } {
+  const data = JSON.stringify(note);
+  const replayInLink = data.length < 5000; // links much longer than this can fail
+  const replay = replayInLink
+    ? `\n\n<details><summary>Replay data</summary>\n\n\`\`\`json\n${data}\n\`\`\`\n</details>`
+    : '\n\n(Replay data is on your clipboard: paste it here.)';
+  const title = `Playtest: ${note.note.slice(0, 60)}`;
+  return {
+    href: `${NEW_IDEA_URL}&title=${encodeURIComponent(title)}&body=${encodeURIComponent(note.note + replay)}`,
+    replayInLink,
+  };
+}
+
+/** Playtest note. "Send as idea" opens a prefilled GitHub issue (one tap on a phone); "Save" keeps it locally. */
+function NoteBox({ makeNote, onDone }: { makeNote: (text: string) => FeedbackNote; onDone: () => void }) {
   const [text, setText] = useState('');
+  const note = makeNote(text.trim() || '(no text)');
+  const { href, replayInLink } = ideaLink(note);
   return (
     <section class="note" aria-label="Playtest note">
-      <label for="note-text">Playtest note: what did you notice or feel right now? The exact moment is saved with it.</label>
+      <label for="note-text">Playtest note: what did you notice or feel right now? The exact moment is attached.</label>
       {/* biome-ignore lint/a11y/noAutofocus: the box opens on purpose to type into */}
       <textarea id="note-text" rows={2} autofocus value={text} onInput={(e) => setText(e.currentTarget.value)} />
-      <button type="button" class="primary" data-act="note-save" onClick={() => onSave(text.trim())}>
-        Save note
+      <a
+        class="button primary"
+        data-act="note-send"
+        href={href}
+        target="_blank"
+        rel="noopener"
+        onClick={() => {
+          addNote(note);
+          if (!replayInLink) navigator.clipboard?.writeText(JSON.stringify(note)).catch(() => undefined);
+          onDone();
+        }}
+      >
+        Send as idea
+      </a>
+      <button
+        type="button"
+        data-act="note-save"
+        onClick={() => {
+          if (text.trim()) addNote(note);
+          onDone();
+        }}
+      >
+        Save on this device
       </button>
-      <button type="button" onClick={() => onSave('')}>
+      <button type="button" onClick={onDone}>
         Cancel
       </button>
     </section>

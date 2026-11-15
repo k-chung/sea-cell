@@ -25,4 +25,4 @@ Playtest notes (N key) pasted into issues can be replayed in the dev panel ("Loa
 - Leave `main` playable: merged, or an open PR with green CI.
 - At module ends: update "Status and next up" in the design doc (done, in progress, next 3,
   "Ideas sorted this session: N", ideas waiting on the owner) and republish the hosted build
-  (`npm run build:single`, published to a new path per version so older versions stay playable).
+  (`npm run build:single`, then publish `dist-single/latest/sea-cell.html`: one stable link to bookmark).

@@ -2,6 +2,11 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-15 — Phone + PC with minimal friction (owner directive)
+One stable hosted link (latest), no hover-only info, 44px touch targets, sidebar collapsed on phones,
+"Send as idea" turns a playtest note into a prefilled GitHub issue (replay data inline if under ~5 KB,
+otherwise copied to the clipboard). E2E plays a full run on an emulated phone with touch.
+
 ## 2026-11-15 — Module 1: cards and planning
 - **No git tags** (owner): friction without value now; hosted links + merged PRs preserve versions.
 - **Parts are acquired, not dealt per turn.** Part cards appear in the random offer; owned parts can always

@@ -64,8 +64,12 @@ button {
 button:hover:not(:disabled) { border-color: var(--accent); }
 button:disabled { opacity: 0.55; cursor: not-allowed; }
 button[aria-pressed='true'] { border: 2px solid var(--accent); background: var(--accent-bg); }
-button.primary { background: var(--accent); color: var(--panel); border-color: var(--accent); font-weight: 700; }
+a.button { display: inline-block; text-decoration: none; color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
+a.button.primary, button.primary { background: var(--accent); color: var(--panel); border-color: var(--accent); font-weight: 700; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* Phones and tablets: finger-sized targets. */
+@media (pointer: coarse) { button, a.button, .check { min-height: 44px; } }
+.sidebar summary { cursor: pointer; font-weight: 700; margin: 6px 0; }
 .check { display: inline-flex; gap: 6px; align-items: center; }
 meter { width: 70px; vertical-align: middle; }
 

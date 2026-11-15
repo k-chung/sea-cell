@@ -88,10 +88,18 @@ export function StatusBar({ s, r }: ScreenProps) {
   );
 }
 
+/** Phones get the sidebar collapsed (it sits below the main panel there). */
+const isPhone = () => typeof window !== 'undefined' && window.matchMedia('(max-width: 820px)').matches;
+
 export function Sidebar({ s, r }: ScreenProps) {
+  const phone = isPhone();
   const intel = s.rival.intelTarget ? lookup.getMilestone(r, s.rival.intelTarget).name : 'no activity';
   return (
     <aside class="sidebar" aria-label="Race and crew">
+      <details open={!phone}>
+        <summary>
+          Race: you {Object.keys(s.milestones).length}, USSR {Object.keys(s.rival.milestones).length}
+        </summary>
       <h2>
         Race <RivalEmblem scale={2} />
       </h2>
@@ -116,7 +124,9 @@ export function Sidebar({ s, r }: ScreenProps) {
       <p class="intel">
         Intel: Soviets likely on {intel} ({s.rival.intelStage ?? '?'}, estimate)
       </p>
-      <h2>Crew</h2>
+      </details>
+      <details open={!phone}>
+        <summary>Crew ({s.crew.filter((a) => a.status !== 'dead').length})</summary>
       <ul class="crew">
         {s.crew.map((a) => (
           <li key={a.id} class={a.status} title={lookup.getTrait(r, a.traitId).description}>
@@ -147,6 +157,7 @@ export function Sidebar({ s, r }: ScreenProps) {
           </ul>
         </>
       )}
+      </details>
       <details>
         <summary>Program log</summary>
         <ul class="history">

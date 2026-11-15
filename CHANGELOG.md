@@ -8,6 +8,8 @@ Plain-English notes on each playable version. Newest first.
 - Parts are acquired as cards and kept; rockets are built from any part you own.
 - Research/lobby/PR/recruit menu removed (they're cards now). Launching or ending the turn ends planning.
 - New UI built with Preact; plain placeholder look until Module 3 (art).
+- Phone pass: one stable "latest" link, no hover-only info, 44px tap targets, collapsible sidebar on phones,
+  and playtest notes send as a prefilled GitHub idea in one tap.
 
 ## Module 0 (groundwork for the card-based redesign)
 - No gameplay changes. Content reorganized by era; art layer; Biome lint/format; slimmer CLAUDE.md + docs.
