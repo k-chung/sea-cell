@@ -2,6 +2,12 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-15 — Fuzzy odds; version label on every build (owner feedback)
+- Odds show as words + pips, never exact percentages. Replaces "visible odds" from the first design quiz
+  (owner's call wins). Exact numbers stay in state and the dev panel for balancing.
+- Each published build shows "vX.Y · <commit>" and is built from main after merging, so the link and the
+  version Claude reports always match.
+
 ## 2026-11-15 — Module 2: phase-by-phase flights
 - **Claude merges its own PRs once CI is green** (owner decision; less friction).
 - **Each phase is a step**: margin (+10%/point; 1 per flight, +1 with spare lift) and once-per-flight crew

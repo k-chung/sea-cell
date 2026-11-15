@@ -8,6 +8,7 @@
 
 import type { CardRef, Effect, Ruleset } from '../content/types.ts';
 import { recruitAstronaut } from './astronauts.ts';
+import { boostWord, likelihood } from './likelihood.ts';
 import { getPart, getPersonnel, getTrait } from './lookup.ts';
 import { shuffle } from './rng.ts';
 import type { GameState } from './state.ts';
@@ -41,7 +42,7 @@ export function describeCard(r: Ruleset, card: CardRef): Omit<CardView, 'blocked
       const stat = p.slot === 'payload' ? (p.crewSeats ? `${p.crewSeats} seats` : p.payloadKind) : `lift ${p.lift}`;
       return {
         title: p.name,
-        text: `New ${p.slot}: ${stat}, ${p.reliability}%${p.fuel === 'none' ? '' : `, ${p.fuel}`}. ${p.description}`,
+        text: `New ${p.slot}: ${stat}, ${likelihood(p.reliability).toLowerCase()} to work${p.fuel === 'none' ? '' : `, ${p.fuel}`}. ${p.description}`,
         cost: Math.round(p.cost * b.partCostMultiplier),
         actions: b.partCardActions,
       };
@@ -138,7 +139,7 @@ export function effectLabel(e: Effect): string {
     case 'actionsNextTurn':
       return `${n} action(s) next turn`;
     case 'nextLaunchBonus':
-      return `${n}% next launch`;
+      return `${boostWord(e.amount)} next launch`;
     case 'drawCards':
       return `draw ${e.amount}`;
   }

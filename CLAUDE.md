@@ -24,6 +24,9 @@ Code map: `docs/ARCHITECTURE.md`. Read other docs only when the task needs them:
 The owner playtests and works from a phone. Every feature must be playable by tap on a phone and by
 mouse/keyboard on a PC, with the fewest steps: no hover-only information, 44px+ tap targets, E2E covers both.
 Keep one stable playable link: republish `dist-single/latest/sea-cell.html` after each module.
+Players never see exact percentages: show odds as words + pips (`src/core/likelihood.ts`, `src/ui/odds.tsx`).
+Every published build bumps `package.json` version and is built from `main` after merging, so the in-game
+label ("v0.5 · <commit>") matches. End the response with: "Playtest build: <label> — <latest link>".
 
 ## Code rules (do not break)
 - Layers, one direction: `src/content` (data only) -> `src/core` (pure rules, no DOM, no deps) -> `src/ui`.

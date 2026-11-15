@@ -2,6 +2,12 @@
 
 Plain-English notes on each playable version. Newest first.
 
+## v0.5: fuzzy odds and a version label
+- Odds are words plus a 5-pip bar ("Likely", "Coin flip", "Long shot"); boosts read "safer" / "much safer".
+  No exact percentages anywhere players look (the dev panel still has them).
+- The build's version and commit show in the top bar and on the title screen.
+- Version numbers from here: v0.1 cell, v0.2 worm, v0.3 Module 1, v0.4 Module 2, v0.5 this.
+
 ## Module 2: phase-by-phase flights
 - Flights now play one phase at a time: see the odds, spend margin (+10% per point) or a crew ability
   (once per flight), then proceed. Phases with nothing to decide roll on their own (fewer taps).

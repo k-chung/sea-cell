@@ -7,17 +7,17 @@ export const personnel: PersonnelDef[] = [
   {
     id: 'brandt', name: 'Dr. Wernher Brandt', title: 'Chief rocket designer',
     boosterReliability: 5,
-    description: '+5% reliability on every booster.',
+    description: 'Every booster is more reliable.',
   },
   {
     id: 'hale', name: 'Dr. Margaret Hale', title: 'Guidance lead',
     upperReliability: 4,
-    description: '+4% reliability on upper stages. Unlocks guidance options in a crisis.',
+    description: 'Upper stages are more reliable. Unlocks guidance options in a crisis.',
   },
   {
     id: 'calloway', name: 'Ed Calloway', title: 'Flight director',
     crisisOdds: 8,
-    description: '+8% on every crisis option. Unlocks "work the problem" options.',
+    description: 'Better odds on every crisis option. Unlocks "work the problem" options.',
   },
   {
     id: 'webber', name: 'James Webber', title: 'Agency administrator',
@@ -32,7 +32,7 @@ export const personnel: PersonnelDef[] = [
   {
     id: 'lin', name: 'Dr. Chen Lin', title: 'Spacecraft systems lead',
     payloadReliability: 5,
-    description: '+5% reliability on every payload.',
+    description: 'Every payload is more reliable.',
   },
 ];
 
