@@ -8,6 +8,7 @@ import { applyEffect, offerViews } from '../src/core/cards.ts';
 import {
   type Action,
   createGame,
+  currentOdds,
   type GameState,
   previewLaunch,
   type RunRecord,
@@ -149,19 +150,70 @@ describe('launch preview', () => {
     expect(preview.problems).toContain('Pick 1 astronaut(s); 0 picked');
   });
 
-  it('a forced crisis appears on the next launch', () => {
-    let s = newGame();
-    s = step(s, r, { type: 'dev', command: 'forceEvent', eventId: 'satSpin' });
+  it('a forced crisis appears when its phase is flown', () => {
+    let s = step(newGame(), r, { type: 'dev', command: 'forceEvent', eventId: 'computerReboot' });
+    s = step(s, r, satelliteLaunch);
+    expect(s.phase).toBe('flight'); // margin to spend: the flight waits for a choice
+    s = step(s, r, { type: 'proceed' });
+    expect(s.phase).toBe('crisis');
+    expect(s.flight?.crisis?.eventId).toBe('computerReboot');
+  });
+});
+
+const satelliteLaunch: Action = {
+  type: 'launch',
+  missionId: 'satellite',
+  crewIds: [],
+  testFlight: false,
+  redundancy: false,
+  rocket: { booster: 'javelin', upper: 'agile', payload: 'beacon' },
+};
+
+describe('flight phase', () => {
+  it('spending margin adds marginBoost% to the current phase and uses a point', () => {
+    const s0 = step(newGame(), r, satelliteLaunch);
+    const before = currentOdds(s0);
+    const s1 = step(s0, r, { type: 'spendMargin' });
+    expect(currentOdds(s1)).toBe(Math.min(99, before + r.balance.marginBoost));
+    expect(s1.flight?.margin).toBe((s0.flight?.margin ?? 0) - 1);
+  });
+
+  it('with nothing to spend, phases roll on their own (no extra taps)', () => {
+    const noMargin = { ...r, balance: { ...r.balance, marginBase: 0 } };
+    const s = step(createGame(noMargin, 3, { storyMode: false }), noMargin, satelliteLaunch);
+    expect(s.phase).not.toBe('flight');
+  });
+
+  it('a crew ability works once per flight', () => {
+    let s = newGame(9);
+    const engineer = s.crew.find((a) => a.traitId === 'engineer') ?? s.crew[0];
+    if (!engineer) throw new Error('no crew');
+    engineer.traitId = 'engineer';
+    s = {
+      ...s,
+      milestones: { satellite: 0 },
+    };
     s = step(s, r, {
       type: 'launch',
-      missionId: 'satellite',
-      crewIds: [],
+      missionId: 'crewedOrbit',
+      crewIds: [engineer.id],
       testFlight: false,
       redundancy: false,
-      rocket: { booster: 'javelin', upper: 'agile', payload: 'beacon' },
+      rocket: { booster: 'titanus', upper: 'agile', payload: 'pilgrim' },
     });
-    expect(s.phase).toBe('crisis');
-    expect(s.flight?.crisis?.eventId).toBe('satSpin');
+    const before = currentOdds(s);
+    s = step(s, r, { type: 'useAbility', crewId: engineer.id });
+    expect(currentOdds(s)).toBe(Math.min(99, before + 15));
+    expect(() => step(s, r, { type: 'useAbility', crewId: engineer.id })).toThrow('no ability');
+  });
+
+  it('surviving a crisis continues the flight', () => {
+    let s = step(newGame(), r, { type: 'dev', command: 'forceEvent', eventId: 'pressLeak' });
+    s = step(s, r, satelliteLaunch);
+    s = step(s, r, { type: 'proceed' });
+    s = step(s, r, { type: 'chooseOption', index: 0 }); // "Tell the truth": certain success
+    expect(['flight', 'crisis', 'report']).toContain(s.phase);
+    expect(s.flight === null || (s.flight?.phaseIndex ?? 0) >= 1).toBe(true);
   });
 });
 

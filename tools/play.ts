@@ -17,14 +17,20 @@ export function playBotRun(r: Ruleset, seed: number, storyMode = false): BotRun 
   const actions: Action[] = [];
   let launches = 0;
   let crises = 0;
+  let crisisThisFlight = false;
   for (let guard = 0; s.phase !== 'over'; guard++) {
     if (guard > 2000) throw new Error(`Bot run ${seed} did not finish`);
     const action = botAction(s, r);
     s = step(s, r, action);
     actions.push(action);
+    // A mission "had a crisis" if any crisis came up between its launch and its end.
     if (action.type === 'launch') {
       launches++;
-      if (s.phase === 'crisis') crises++;
+      crisisThisFlight = false;
+    }
+    if (s.phase === 'crisis' && !crisisThisFlight) {
+      crisisThisFlight = true;
+      crises++;
     }
   }
   return { seed, actions, final: s, launches, crises };

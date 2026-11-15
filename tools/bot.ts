@@ -8,6 +8,7 @@ import {
   type Action,
   type CardView,
   crisisOptions,
+  currentOdds,
   type GameState,
   type LaunchPlan,
   lookup,
@@ -15,6 +16,7 @@ import {
   offerViews,
   previewLaunch,
   testFlightCost,
+  usableAbilities,
 } from '../src/core/index.ts';
 
 const RESULT_SCORE = { success: 3, abort: 0.5, lost: -2, disaster: -6 } as const;
@@ -36,6 +38,8 @@ export function botAction(s: GameState, r: Ruleset): Action {
   switch (s.phase) {
     case 'plan':
       return planAction(s, r);
+    case 'flight':
+      return flightAction(s, r);
     case 'crisis':
       return crisisAction(s, r);
     case 'reward':
@@ -141,6 +145,15 @@ function bestPlan(s: GameState, r: Ruleset, missionId: string, reserve: number):
     }
   }
   return best?.plan ?? null;
+}
+
+/** Flight: use a crew ability on a risky phase, then margin, then proceed. */
+function flightAction(s: GameState, r: Ruleset): Action {
+  const odds = currentOdds(s);
+  const ability = usableAbilities(s, r)[0];
+  if (ability && odds < 92) return { type: 'useAbility', crewId: ability.crewId };
+  if ((s.flight?.margin ?? 0) > 0 && odds < 88) return { type: 'spendMargin' };
+  return { type: 'proceed' };
 }
 
 function crisisAction(s: GameState, r: Ruleset): Action {

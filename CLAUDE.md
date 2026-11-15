@@ -7,7 +7,8 @@ Code map: `docs/ARCHITECTURE.md`. Read other docs only when the task needs them:
 ## Every session
 1. First, list open `idea` issues: `gh api "repos/k-chung/sea-cell/issues?labels=idea&state=open"`.
    Mention them only if there are new ones (or if Issues can't be reached). Sort them per `docs/workflow.md`.
-2. Work one module/feature per branch + PR. `main` must always build and play. The owner merges.
+2. Work one module/feature per branch + PR. `main` must always build and play. Claude merges its own PRs
+   once CI is green (owner decision); the owner playtests the latest link instead of reviewing code.
 3. Before ending: CI-green PR, "Status and next up" in the design doc updated at module ends.
 
 ## Talking to the owner

@@ -32,6 +32,12 @@
    }
   },
   {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
    "type": "continue"
   },
   {
@@ -53,8 +59,21 @@
    }
   },
   {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
    "type": "chooseOption",
    "index": 0
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-1"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
@@ -62,16 +81,6 @@
   {
    "type": "chooseReward",
    "index": 0
-  },
-  {
-   "type": "playCard",
-   "index": 0
-  },
-  {
-   "type": "endTurn"
-  },
-  {
-   "type": "continue"
   },
   {
    "type": "launch",
@@ -89,14 +98,34 @@
    }
   },
   {
-   "type": "chooseOption",
-   "index": 2
+   "type": "useAbility",
+   "crewId": "crew-1"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-2"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
   },
   {
    "type": "chooseReward",
+   "index": 1
+  },
+  {
+   "type": "playCard",
    "index": 1
   },
   {
@@ -115,6 +144,19 @@
    }
   },
   {
+   "type": "proceed"
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
    "type": "chooseOption",
    "index": 0
   },
@@ -127,15 +169,7 @@
   },
   {
    "type": "playCard",
-   "index": 2
-  },
-  {
-   "type": "playCard",
    "index": 3
-  },
-  {
-   "type": "playCard",
-   "index": 2
   },
   {
    "type": "endTurn"
@@ -144,30 +178,52 @@
    "type": "continue"
   },
   {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-1",
-    "crew-2"
-   ],
-   "testFlight": false,
-   "redundancy": false,
-   "rocket": {
-    "booster": "titanus",
-    "upper": "agile",
-    "payload": "tandem"
-   }
+   "type": "playCard",
+   "index": 3
   },
   {
-   "type": "chooseOption",
-   "index": 2
+   "type": "endTurn"
   },
   {
    "type": "continue"
   },
   {
    "type": "playCard",
+   "index": 2
+  },
+  {
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 4
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "playCard",
    "index": 0
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
   },
   {
    "type": "playCard",
@@ -184,58 +240,6 @@
    "index": 4
   },
   {
-   "type": "playCard",
-   "index": 1
-  },
-  {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-1",
-    "crew-2"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "javelin",
-    "upper": "centaurus",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 0
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "launch",
-   "missionId": "docking",
-   "crewIds": [
-    "crew-1",
-    "crew-2"
-   ],
-   "testFlight": true,
-   "redundancy": true,
-   "rocket": {
-    "booster": "titanus",
-    "upper": "agile",
-    "payload": "tandem"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 0
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "playCard",
-   "index": 0
-  },
-  {
    "type": "endTurn"
   },
   {
@@ -243,7 +247,7 @@
   },
   {
    "type": "playCard",
-   "index": 0
+   "index": 3
   },
   {
    "type": "playCard",
@@ -253,8 +257,8 @@
    "type": "launch",
    "missionId": "lunarProbe",
    "crewIds": [],
-   "testFlight": true,
-   "redundancy": true,
+   "testFlight": false,
+   "redundancy": false,
    "rocket": {
     "booster": "titanus",
     "upper": "vanguard-2",
@@ -262,11 +266,88 @@
    }
   },
   {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "chooseOption",
+   "index": 0
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "chooseReward",
+   "index": 0
+  },
+  {
+   "type": "launch",
+   "missionId": "lunarFlyby",
+   "crewIds": [
+    "crew-1",
+    "crew-2",
+    "crew-3"
+   ],
+   "testFlight": false,
+   "redundancy": false,
+   "rocket": {
+    "booster": "colossus-1",
+    "upper": "centaurus",
+    "payload": "odyssey"
+   }
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-1"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-2"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-3"
+  },
+  {
+   "type": "proceed"
+  },
+  {
    "type": "continue"
   },
   {
    "type": "chooseReward",
    "index": 2
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 3
   },
   {
    "type": "launch",
@@ -285,82 +366,38 @@
    }
   },
   {
-   "type": "chooseOption",
-   "index": 0
+   "type": "proceed"
   },
   {
-   "type": "continue"
-  },
-  {
-   "type": "chooseReward",
-   "index": 1
-  },
-  {
-   "type": "playCard",
-   "index": 2
-  },
-  {
-   "type": "launch",
-   "missionId": "moonLandingLOR",
-   "crewIds": [
-    "crew-1",
-    "crew-2",
-    "crew-3"
-   ],
-   "testFlight": false,
-   "redundancy": false,
-   "rocket": {
-    "booster": "colossus-5",
-    "upper": "centaurus",
-    "payload": "odyssey-lander"
-   }
+   "type": "proceed"
   },
   {
    "type": "chooseOption",
    "index": 0
   },
   {
-   "type": "continue"
+   "type": "proceed"
   },
   {
-   "type": "playCard",
-   "index": 3
-  },
-  {
-   "type": "endTurn"
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "playCard",
-   "index": 3
-  },
-  {
-   "type": "endTurn"
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "endTurn"
+   "type": "chooseOption",
+   "index": 0
   },
   {
    "type": "continue"
   }
  ],
  "expected": {
-  "turn": 17,
+  "turn": 16,
   "phase": "over",
-  "budget": 66,
-  "public": 75,
-  "congress": 96,
-  "prestige": 49,
+  "budget": 7,
+  "public": 65,
+  "congress": 97,
+  "prestige": 42,
   "milestones": {
    "satellite": 1,
    "crewedOrbit": 2,
-   "spacewalk": 4,
-   "docking": 5,
+   "spacewalk": 3,
+   "docking": 4,
    "lunarProbe": 12,
    "lunarFlyby": 13
   },
@@ -368,16 +405,16 @@
    "satellite": 1,
    "crewedOrbit": 3,
    "spacewalk": 5,
-   "docking": 7,
+   "docking": 8,
    "lunarProbe": 9,
-   "lunarFlyby": 13,
-   "moonLanding": 17
+   "lunarFlyby": 12,
+   "moonLanding": 16
   },
   "fallen": [],
   "outcome": {
    "won": false,
    "reason": "The Soviets reached First human on the Moon first."
   },
-  "rngState": -380316183
+  "rngState": -756387065
  }
 }

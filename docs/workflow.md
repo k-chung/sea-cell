@@ -15,7 +15,8 @@ Never edit or delete the owner's issue text. Log decisions an idea causes in `do
 Playtest notes (N key) pasted into issues can be replayed in the dev panel ("Load and replay").
 
 ## Branches, PRs, versions
-- One module/feature per branch + PR; `main` always builds and plays; the owner merges.
+- One module/feature per branch + PR; `main` always builds and plays. Claude merges once CI is green
+  (owner decision 2026-11-15); bad changes are reverted, not hand-reviewed up front.
 - Each playable milestone gets a CHANGELOG.md entry and its own hosted link. No git tags (dropped 2026-11-15:
   friction without value; hosted links + merged PRs already preserve every version).
 - Pivots: keep the current build's hosted link, log why in `docs/decisions.md`, update the design doc (dropped ideas go to

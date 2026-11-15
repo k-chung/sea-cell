@@ -28,8 +28,10 @@
    }
   },
   {
-   "type": "chooseOption",
-   "index": 0
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
@@ -37,6 +39,24 @@
   {
    "type": "chooseReward",
    "index": 0
+  },
+  {
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 2
+  },
+  {
+   "type": "playCard",
+   "index": 1
   },
   {
    "type": "launch",
@@ -53,8 +73,24 @@
    }
   },
   {
+   "type": "useAbility",
+   "crewId": "crew-1"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
    "type": "chooseOption",
-   "index": 1
+   "index": 0
+  },
+  {
+   "type": "spendMargin"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
@@ -65,11 +101,43 @@
   },
   {
    "type": "playCard",
-   "index": 3
+   "index": 2
   },
   {
    "type": "playCard",
-   "index": 3
+   "index": 2
+  },
+  {
+   "type": "launch",
+   "missionId": "spacewalk",
+   "crewIds": [
+    "crew-1",
+    "crew-2"
+   ],
+   "testFlight": true,
+   "redundancy": false,
+   "rocket": {
+    "booster": "titanus",
+    "upper": "agile",
+    "payload": "tandem"
+   }
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "chooseOption",
+   "index": 1
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 4
   },
   {
    "type": "launch",
@@ -87,23 +155,35 @@
    }
   },
   {
+   "type": "proceed"
+  },
+  {
    "type": "chooseOption",
-   "index": 0
+   "index": 2
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-1"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-2"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
   },
   {
    "type": "chooseReward",
-   "index": 1
-  },
-  {
-   "type": "playCard",
-   "index": 2
-  },
-  {
-   "type": "playCard",
-   "index": 3
+   "index": 0
   },
   {
    "type": "launch",
@@ -121,8 +201,13 @@
    }
   },
   {
-   "type": "chooseOption",
-   "index": 2
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
@@ -130,78 +215,46 @@
   {
    "type": "chooseReward",
    "index": 1
-  },
-  {
-   "type": "playCard",
-   "index": 1
-  },
-  {
-   "type": "launch",
-   "missionId": "lunarProbe",
-   "crewIds": [],
-   "testFlight": false,
-   "redundancy": false,
-   "rocket": {
-    "booster": "titanus",
-    "upper": "vanguard-2",
-    "payload": "surveyor"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 0
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "playCard",
-   "index": 2
-  },
-  {
-   "type": "playCard",
-   "index": 2
-  },
-  {
-   "type": "playCard",
-   "index": 1
-  },
-  {
-   "type": "launch",
-   "missionId": "lunarProbe",
-   "crewIds": [],
-   "testFlight": false,
-   "redundancy": false,
-   "rocket": {
-    "booster": "titanus",
-    "upper": "vanguard-2",
-    "payload": "surveyor"
-   }
-  },
-  {
-   "type": "chooseOption",
-   "index": 2
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "chooseReward",
-   "index": 0
-  },
-  {
-   "type": "endTurn"
-  },
-  {
-   "type": "continue"
   },
   {
    "type": "playCard",
    "index": 4
   },
   {
+   "type": "launch",
+   "missionId": "lunarProbe",
+   "crewIds": [],
+   "testFlight": true,
+   "redundancy": true,
+   "rocket": {
+    "booster": "titanus",
+    "upper": "vanguard-2",
+    "payload": "surveyor"
+   }
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "chooseOption",
+   "index": 1
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "chooseReward",
+   "index": 0
+  },
+  {
    "type": "playCard",
-   "index": 2
+   "index": 4
   },
   {
    "type": "endTurn"
@@ -211,26 +264,55 @@
   },
   {
    "type": "launch",
-   "missionId": "lunarFlyby",
-   "crewIds": [
-    "crew-1",
-    "crew-2",
-    "crew-3"
-   ],
+   "missionId": "lunarProbe",
+   "crewIds": [],
    "testFlight": true,
-   "redundancy": false,
+   "redundancy": true,
    "rocket": {
-    "booster": "colossus-5",
+    "booster": "titanus",
     "upper": "vanguard-2",
-    "payload": "odyssey-lander"
+    "payload": "surveyor"
    }
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "chooseOption",
+   "index": 2
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
   },
   {
-   "type": "chooseReward",
+   "type": "playCard",
    "index": 2
+  },
+  {
+   "type": "playCard",
+   "index": 1
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
   },
   {
    "type": "launch",
@@ -243,30 +325,33 @@
    "testFlight": false,
    "redundancy": false,
    "rocket": {
-    "booster": "colossus-1",
-    "upper": "centaurus",
-    "payload": "odyssey-lander"
+    "booster": "colossus-5",
+    "upper": "vanguard-2",
+    "payload": "odyssey"
    }
   },
   {
-   "type": "chooseOption",
-   "index": 0
+   "type": "useAbility",
+   "crewId": "crew-1"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "useAbility",
+   "crewId": "crew-2"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
   },
   {
-   "type": "endTurn"
-  },
-  {
-   "type": "continue"
-  },
-  {
-   "type": "playCard",
-   "index": 0
-  },
-  {
-   "type": "playCard",
+   "type": "chooseReward",
    "index": 2
   },
   {
@@ -277,7 +362,23 @@
   },
   {
    "type": "playCard",
-   "index": 1
+   "index": 3
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
+  },
+  {
+   "type": "playCard",
+   "index": 3
+  },
+  {
+   "type": "endTurn"
+  },
+  {
+   "type": "continue"
   },
   {
    "type": "launch",
@@ -287,8 +388,8 @@
     "crew-2",
     "crew-3"
    ],
-   "testFlight": false,
-   "redundancy": false,
+   "testFlight": true,
+   "redundancy": true,
    "rocket": {
     "booster": "colossus-5",
     "upper": "centaurus",
@@ -296,42 +397,53 @@
    }
   },
   {
-   "type": "chooseOption",
-   "index": 2
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
+  },
+  {
+   "type": "proceed"
   },
   {
    "type": "continue"
   }
  ],
  "expected": {
-  "turn": 13,
+  "turn": 16,
   "phase": "over",
-  "budget": 7,
+  "budget": 18,
   "public": 100,
   "congress": 97,
-  "prestige": 79,
+  "prestige": 78,
   "milestones": {
    "satellite": 1,
-   "crewedOrbit": 2,
-   "spacewalk": 3,
-   "docking": 4,
-   "lunarProbe": 6,
-   "lunarFlyby": 9,
-   "moonLanding": 13
+   "crewedOrbit": 3,
+   "spacewalk": 5,
+   "docking": 6,
+   "lunarProbe": 7,
+   "lunarFlyby": 12,
+   "moonLanding": 16
   },
   "rivalMilestones": {
    "satellite": 1,
-   "crewedOrbit": 3,
-   "spacewalk": 4,
-   "docking": 7,
-   "lunarProbe": 9,
-   "lunarFlyby": 12
+   "crewedOrbit": 4,
+   "spacewalk": 6,
+   "docking": 9,
+   "lunarProbe": 10,
+   "lunarFlyby": 13
   },
   "fallen": [],
   "outcome": {
    "won": true,
    "reason": "You reached First human on the Moon first."
   },
-  "rngState": 74848597
+  "rngState": 635166770
  }
 }

@@ -5,7 +5,7 @@
 import type { Ruleset } from '../content/types.ts';
 import type { Action } from './actions.ts';
 import { playCard } from './cards.ts';
-import { chooseOption, launch } from './flight.ts';
+import { chooseOption, launch, proceed, spendMargin, useAbility } from './flight.ts';
 import { getEvent } from './lookup.ts';
 import type { GamePhase, GameState } from './state.ts';
 import { chooseReward, continueAfterReport, endTurn } from './turn.ts';
@@ -32,6 +32,18 @@ export function step(state: GameState, r: Ruleset, action: Action): GameState {
     case 'endTurn':
       expectPhase(s, 'plan', action);
       endTurn(s, r, []);
+      break;
+    case 'spendMargin':
+      expectPhase(s, 'flight', action);
+      spendMargin(s, r);
+      break;
+    case 'useAbility':
+      expectPhase(s, 'flight', action);
+      useAbility(s, r, action.crewId);
+      break;
+    case 'proceed':
+      expectPhase(s, 'flight', action);
+      proceed(s, r);
       break;
     case 'chooseOption':
       expectPhase(s, 'crisis', action);

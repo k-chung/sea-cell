@@ -51,6 +51,13 @@ export interface MissionDef {
 
 export type Skill = 'piloting' | 'repair' | 'nerve' | 'charm';
 
+/** A crew ability: +bonus% to the current flight phase, once per flight, in the listed phases. */
+export interface CrewAbility {
+  name: string;
+  bonus: number;
+  phases: FlightPhase[] | 'any';
+}
+
 export interface TraitDef {
   id: string;
   name: string;
@@ -60,6 +67,8 @@ export interface TraitDef {
   skillBonus: number;
   /** Extra odds on every crisis option. */
   allOddsBonus?: number;
+  /** Once per flight, this astronaut can boost the current phase's odds. */
+  ability?: CrewAbility;
   /** Extra public support when a mission with this astronaut succeeds. */
   successPublic?: number;
 }
@@ -186,7 +195,9 @@ export interface Balance {
   partCardActions: number;
   partCostMultiplier: number;
   staffHireCost: number;
-  minorCrisisChance: number;
+  minorCrisisPerPhase: number;
+  marginBase: number;
+  marginBoost: number;
   reliabilityPerFlight: number;
   maxFlightBonus: number;
   reliabilityCap: number;

@@ -6,7 +6,7 @@ import type { Balance } from '../content/types.ts';
 import type { Action } from '../core/index.ts';
 import { DevPanel } from './devPanel.tsx';
 import { type Draft, emptyDraft } from './draft.ts';
-import { CrisisScreen, ReportScreen } from './screens/flight.tsx';
+import { CrisisScreen, FlightScreen, ReportScreen } from './screens/flight.tsx';
 import { OverScreen, RewardScreen, Sidebar, StatusBar } from './screens/misc.tsx';
 import { PlanScreen } from './screens/plan.tsx';
 import type { ScreenProps } from './screens/props.ts';
@@ -137,6 +137,7 @@ export function App() {
         <div class="layout">
           <main class={`phase-${phase}`}>
             {phase === 'plan' && <PlanScreen {...p} />}
+            {phase === 'flight' && <FlightScreen {...p} />}
             {phase === 'crisis' && <CrisisScreen {...p} />}
             {phase === 'report' && <ReportScreen {...p} />}
             {phase === 'reward' && <RewardScreen {...p} />}
