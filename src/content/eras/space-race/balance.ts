@@ -36,7 +36,9 @@ export const balance: Balance = {
   redundancyCost: 8, // redundancy: re-roll the first failed phase once
 
   // --- Crises ---
-  minorCrisisChance: 0.7, // chance of a minor anomaly on an otherwise smooth flight
+  minorCrisisPerPhase: 0.3, // chance of an anomaly in a phase that rolled fine
+  marginBase: 1, // margin points per flight (+1 more with spare lift); each adds marginBoost% to one phase
+  marginBoost: 10,
   veteranFlights: 2, // astronauts with this many flights are veterans...
   veteranBonus: 5, // ...and add this to crisis odds
   oddsFloor: 5,

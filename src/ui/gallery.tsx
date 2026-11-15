@@ -7,7 +7,7 @@ import { render } from 'preact';
 import { type Action, createGame, type GameState, step } from '../core/index.ts';
 import { TitleScreen } from './app.tsx';
 import { type Draft, emptyDraft } from './draft.ts';
-import { CrisisScreen, ReportScreen } from './screens/flight.tsx';
+import { CrisisScreen, FlightScreen, ReportScreen } from './screens/flight.tsx';
 import { OverScreen, RewardScreen, Sidebar, StatusBar } from './screens/misc.tsx';
 import { PlanScreen } from './screens/plan.tsx';
 import type { ScreenProps } from './screens/props.ts';
@@ -38,11 +38,14 @@ function scenes(): { name: string; s: GameState | null; draft?: Draft; phaseScre
   const start = createGame(r, SEED, { storyMode: false });
   const mid = midGame();
   const crew = mid.crew.slice(0, 2).map((a) => a.id);
-  const crisis = run(
+  const flying = run(
     mid,
     { type: 'dev', command: 'forceEvent', eventId: 'suitBalloon' },
     { type: 'launch', missionId: 'spacewalk', rocket, crewIds: crew, testFlight: false, redundancy: false },
   );
+  // Fly on until the forced spacewalk crisis (proceed through earlier phases).
+  let crisis = flying;
+  for (let i = 0; i < 10 && crisis.phase === 'flight'; i++) crisis = run(crisis, { type: 'proceed' });
   const report = run(crisis, { type: 'chooseOption', index: 1 });
   const reward: GameState = {
     ...mid,
@@ -65,6 +68,7 @@ function scenes(): { name: string; s: GameState | null; draft?: Draft; phaseScre
     { name: 'Title screen', s: null },
     { name: 'Plan: start of a run', s: start },
     { name: 'Plan: spacewalk built, crew picked', s: mid, draft: { ...emptyDraft(), missionId: 'spacewalk', ...rocket, crewIds: crew } },
+    { name: 'Flight: first phase, margin to spend', s: flying },
     { name: 'Crisis (forced: suit ballooning)', s: crisis },
     { name: 'Report after the crisis', s: report },
     { name: 'Reward pick', s: reward },
@@ -82,6 +86,7 @@ function Scene({ s, draft }: { s: GameState | null; draft?: Draft }) {
       <div class="layout">
         <main class={`phase-${s.phase}`}>
           {s.phase === 'plan' && <PlanScreen {...p} />}
+          {s.phase === 'flight' && <FlightScreen {...p} />}
           {s.phase === 'crisis' && <CrisisScreen {...p} />}
           {s.phase === 'report' && <ReportScreen {...p} />}
           {s.phase === 'reward' && <RewardScreen {...p} />}

@@ -27,6 +27,7 @@ async function playFullRun(page: Page) {
   for (let i = 0; i < 300 && !(await page.locator('main.phase-over').count()); i++) {
     const options = page.locator('main.phase-crisis .options button, main.phase-reward .options button');
     if (await options.count()) await options.first().click();
+    else if (await page.locator('main.phase-flight').count()) await page.click('[data-act="proceed"]');
     else if (await page.locator('main.phase-report').count()) await page.click('[data-act="continue"]');
     else await page.click('[data-act="end-turn"]');
   }
@@ -63,6 +64,6 @@ test.describe('phone', () => {
 test('the scene gallery renders every screen', async ({ page }) => {
   const errors = watchErrors(page);
   await page.goto('/gallery.html');
-  await expect(page.locator('.scene')).toHaveCount(8);
+  await expect(page.locator('.scene')).toHaveCount(9);
   expect(errors).toEqual([]);
 });

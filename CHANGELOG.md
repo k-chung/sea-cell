@@ -2,6 +2,15 @@
 
 Plain-English notes on each playable version. Newest first.
 
+## Module 2: phase-by-phase flights
+- Flights now play one phase at a time: see the odds, spend margin (+10% per point) or a crew ability
+  (once per flight), then proceed. Phases with nothing to decide roll on their own (fewer taps).
+- Crew abilities: Test pilot (launch, rendezvous, landing +20%), Engineer (any +15%), Ice water
+  (eva, transfer, reentry +20%), Lucky (any +25%).
+- Margin: 1 point per flight, +1 with spare lift.
+- A failed phase brings a crisis; surviving it continues the flight. Phases that roll fine can still bring
+  an anomaly, so one flight can hold several dramatic moments.
+
 ## Module 1: cards and planning
 - Each turn: 3 action points and a random offer of 5 cards: decisions, rocket parts, staff, astronauts.
 - 11 decision cards (PR, lobbying, contracts, static fires, audits, crunch time...), many with strings attached.

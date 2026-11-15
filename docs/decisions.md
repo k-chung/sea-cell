@@ -2,6 +2,15 @@
 
 One entry per meaningful design or tech decision: date, decision, why. Newest first.
 
+## 2026-11-15 — Module 2: phase-by-phase flights
+- **Claude merges its own PRs once CI is green** (owner decision; less friction).
+- **Each phase is a step**: margin (+10%/point; 1 per flight, +1 with spare lift) and once-per-flight crew
+  abilities (from traits) boost the current phase; then proceed. **Friction guard:** phases with nothing to
+  spend roll automatically.
+- **Surviving a crisis continues the flight** (it used to end it). Anomaly chance is now per phase
+  (`minorCrisisPerPhase` 0.3) instead of per mission. Bot: 68% of flights hit a crisis; wins ~38%.
+- Risk: more taps per flight on phones. Mitigation: the auto-roll guard; watch this in playtests.
+
 ## 2026-11-15 — Phone + PC with minimal friction (owner directive)
 One stable hosted link (latest), no hover-only info, 44px touch targets, sidebar collapsed on phones,
 "Send as idea" turns a playtest note into a prefilled GitHub issue (replay data inline if under ~5 KB,

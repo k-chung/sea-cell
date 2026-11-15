@@ -7,6 +7,7 @@ export { cardView, effectLabel, offerViews } from './cards.ts';
 export { createGame } from './create.ts';
 export type { OptionView } from './crisis.ts';
 export { crisisOptions, fillText } from './crisis.ts';
+export { type AbilityView, currentOdds, currentPhase, usableAbilities } from './flight.ts';
 export * as lookup from './lookup.ts';
 export type { RunRecord } from './replay.ts';
 export { actionsUntilTurn, replay } from './replay.ts';

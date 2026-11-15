@@ -1,7 +1,7 @@
 // Flight phase screens: a crisis decision, and the turn report afterwards.
-// (Module 2 turns flights into several phase-by-phase decisions.)
+// Flights go phase by phase: spend margin or crew abilities on the current phase, then proceed.
 
-import { crisisOptions, fillText, lookup } from '../../core/index.ts';
+import { crisisOptions, currentOdds, fillText, lookup, usableAbilities } from '../../core/index.ts';
 import { CrewPortrait, Rocket } from '../art.tsx';
 import type { ScreenProps } from './props.ts';
 
@@ -45,6 +45,75 @@ const Log = ({ lines }: { lines: string[] }) => (
   </ul>
 );
 
+/** The phase track: done, current, still to fly. */
+function PhaseTrack({ s, r }: ScreenProps) {
+  const flight = s.flight;
+  if (!flight) return null;
+  const phases = lookup.getMission(r, flight.missionId).phases;
+  return (
+    <ol class="track">
+      {phases.map((ph, i) => {
+        const state = i < flight.phaseIndex ? 'done' : i === flight.phaseIndex ? 'now' : 'next';
+        return (
+          <li key={ph} class={state}>
+            {state === 'done' ? '✔ ' : state === 'now' ? '▶ ' : ''}
+            {ph} <small>{flight.phaseOdds[i]}%</small>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+export function FlightScreen(p: ScreenProps) {
+  const { s, r, act } = p;
+  const flight = s.flight;
+  if (!flight) return <p>No flight.</p>;
+  const phase = lookup.getMission(r, flight.missionId).phases[flight.phaseIndex] ?? '';
+  const abilities = usableAbilities(s, r);
+  return (
+    <div class="flight">
+      <FlyingRocket {...p} />
+      <div>
+        <PhaseTrack {...p} />
+        <section class="phase-now">
+          <p class="muted">Now flying</p>
+          <h1>
+            {phase} <span class="odds">{currentOdds(s)}%</span>
+          </h1>
+          {flight.boost > 0 && <p class="good">+{flight.boost}% from margin and crew</p>}
+          <div class="flight-actions">
+            <button
+              type="button"
+              data-act="margin"
+              disabled={flight.margin <= 0}
+              onClick={() => act({ type: 'spendMargin' })}
+            >
+              Spend margin +{r.balance.marginBoost}% <small>({flight.margin} left)</small>
+            </button>
+            {abilities.map((a) => (
+              <button
+                type="button"
+                key={a.crewId}
+                class="blue"
+                data-act="ability"
+                data-arg={a.crewId}
+                onClick={() => act({ type: 'useAbility', crewId: a.crewId })}
+              >
+                ★ {a.crewName}: {a.ability.name} +{a.ability.bonus}%
+              </button>
+            ))}
+            <button type="button" class="primary" data-act="proceed" onClick={() => act({ type: 'proceed' })}>
+              Proceed
+            </button>
+          </div>
+        </section>
+        <Log lines={flight.lines} />
+      </div>
+    </div>
+  );
+}
+
 export function CrisisScreen(p: ScreenProps) {
   const { s, r, act } = p;
   const flight = s.flight;
@@ -56,6 +125,7 @@ export function CrisisScreen(p: ScreenProps) {
     <div class="flight">
       <FlyingRocket {...p} />
       <div>
+        <PhaseTrack {...p} />
         <Log lines={flight.lines} />
         <section class="alarm" style={{ '--i': flight.lines.length }}>
           <p class="alarm-head">Crisis · {flight.crisis.phase}</p>

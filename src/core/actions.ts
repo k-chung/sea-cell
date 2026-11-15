@@ -16,6 +16,12 @@ export type Action =
   | { type: 'playCard'; index: number }
   /** End the planning phase without launching. */
   | { type: 'endTurn' }
+  /** Flight: spend one margin point on the current phase. */
+  | { type: 'spendMargin' }
+  /** Flight: an astronaut uses their once-per-flight ability on the current phase. */
+  | { type: 'useAbility'; crewId: string }
+  /** Flight: roll the current phase. */
+  | { type: 'proceed' }
   | { type: 'chooseOption'; index: number }
   | { type: 'chooseReward'; index: number } // -1 = skip
   | { type: 'continue' }

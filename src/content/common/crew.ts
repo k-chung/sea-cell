@@ -6,14 +6,17 @@ import type { TraitDef } from '../types.ts';
 export const traits: TraitDef[] = [
   {
     id: 'testPilot', name: 'Test pilot', skill: 'piloting', skillBonus: 15,
+    ability: { name: 'Hand-fly it', bonus: 20, phases: ['launch', 'rendezvous', 'landing'] },
     description: '+15% on piloting options. Unlocks manual-control options.',
   },
   {
     id: 'engineer', name: 'Engineer', skill: 'repair', skillBonus: 15,
+    ability: { name: 'Fix it in flight', bonus: 15, phases: 'any' },
     description: '+15% on repair options. Unlocks improvised fixes.',
   },
   {
     id: 'iceWater', name: 'Ice water', skill: 'nerve', skillBonus: 15,
+    ability: { name: 'Steady nerves', bonus: 20, phases: ['eva', 'transfer', 'reentry'] },
     description: '+15% on nerve options. Stays calm when it matters.',
   },
   {
@@ -22,6 +25,7 @@ export const traits: TraitDef[] = [
   },
   {
     id: 'lucky', name: 'Lucky', skill: 'nerve', skillBonus: 0, allOddsBonus: 5,
+    ability: { name: 'Lucky break', bonus: 25, phases: 'any' },
     description: '+5% on every crisis option.',
   },
 ];

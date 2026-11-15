@@ -10,6 +10,7 @@ export const STATE_VERSION = 2;
 /** Which screen the run is on. */
 export type GamePhase =
   | 'plan' // play cards, then launch a mission or end the turn
+  | 'flight' // flying phase by phase: boost the current phase or proceed
   | 'crisis' // a crisis card is waiting for a choice
   | 'reward' // pick 1 of N rewards (after a first, or from research)
   | 'report' // what happened this turn; press continue
@@ -39,6 +40,18 @@ export interface FlightState {
   redundancy: boolean;
   /** Text lines describing each phase as it was flown. */
   lines: string[];
+  /** Each phase's odds, fixed at launch. */
+  phaseOdds: number[];
+  /** Index of the phase being flown. */
+  phaseIndex: number;
+  /** Extra % on the current phase from margin and crew abilities. */
+  boost: number;
+  /** Margin points left to spend on phases. */
+  margin: number;
+  /** Crew who already used their ability this flight. */
+  usedAbilities: string[];
+  /** Redundancy: re-roll one failed phase per flight. */
+  backupAvailable: boolean;
   /** Set while a crisis is waiting for a decision. */
   crisis: { eventId: string; phase: string } | null;
 }
