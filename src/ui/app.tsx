@@ -12,6 +12,7 @@ import { PlanScreen } from './screens/plan.tsx';
 import type { ScreenProps } from './screens/props.ts';
 import { applyAction, loadSession, makeReport, newSession, type Session, sessionRuleset } from './session.ts';
 import { play } from './sound.ts';
+import { APP_VERSION } from './version.ts';
 import {
   addNote,
   type FeedbackNote,
@@ -154,6 +155,7 @@ export function App() {
       <header class="topbar">
         <b class="brand">Sea Cell</b>
         <span class="muted">{r.era.name}</span>
+        <span class="muted version" data-act="version">{APP_VERSION}</span>
         {tools}
       </header>
       {error && (
@@ -265,6 +267,7 @@ export function TitleScreen(props: {
   return (
     <main class="title">
       <h1>Sea Cell</h1>
+      <p class="muted">Build {APP_VERSION}</p>
       <p>Run a space program. Play cards, build rockets, and beat the Soviets to the Moon.</p>
       <p class="row">
         {hasSave && (

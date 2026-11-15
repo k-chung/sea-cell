@@ -143,9 +143,11 @@ meter { width: 70px; vertical-align: middle; }
 .track li.done { color: var(--good); } .track li.now { font-weight: 800; } .track li.next { color: var(--muted); }
 .phase-now { border: 2px solid var(--accent); border-radius: 10px; padding: 10px 12px; background: var(--panel); }
 .phase-now h1 { text-transform: capitalize; display: flex; gap: 12px; align-items: baseline; }
-.odds { font-size: 2rem; }
 .flight-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 button.blue { border: 2px solid var(--blue); background: var(--blue-bg); }
+
+.pips { letter-spacing: 1px; color: var(--accent); }
+.odds-fuzzy.big { font-size: 1.4rem; }
 
 /* motion (flights only) */
 .log li, .alarm, .after { animation: reveal 0.25s both; animation-delay: calc(var(--i, 0) * 0.3s); }

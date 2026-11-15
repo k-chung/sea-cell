@@ -3,7 +3,9 @@
 
 import type { PartDef, Slot } from '../../content/types.ts';
 import {
+  boostWord,
   type CardView,
+  likelihood,
   lookup,
   missionStatus,
   offerViews,
@@ -12,6 +14,7 @@ import {
   testFlightCost,
 } from '../../core/index.ts';
 import { CrewPortrait, Rocket } from '../art.tsx';
+import { Odds } from '../odds.tsx';
 import { draftPlan } from '../draft.ts';
 import type { ScreenProps } from './props.ts';
 
@@ -133,7 +136,7 @@ function Builder({ s, r, draft, setDraft, act, missionId }: ScreenProps & { miss
               {x.name}{' '}
               <small>
                 {slot === 'payload' ? (x.crewSeats ? `${x.crewSeats} seat` : x.payloadKind) : `lift ${x.lift}`} ·{' '}
-                {partReliability(s, r, x.id)}% · ${x.cost}
+                {likelihood(partReliability(s, r, x.id)).toLowerCase()} · ${x.cost}
               </small>
             </button>
           ))}
@@ -192,7 +195,7 @@ function Builder({ s, r, draft, setDraft, act, missionId }: ScreenProps & { miss
                 checked={draft.testFlight}
                 onChange={(e) => setDraft({ ...draft, testFlight: e.currentTarget.checked })}
               />{' '}
-              Test flight ${testFlightCost(s, r)} (+{r.balance.testFlightBonus}% launch)
+              Test flight ${testFlightCost(s, r)} ({boostWord(r.balance.testFlightBonus)} launch)
             </label>
             <label class="check">
               <input
@@ -208,13 +211,13 @@ function Builder({ s, r, draft, setDraft, act, missionId }: ScreenProps & { miss
           <div class="preview">
             <p>
               Lift {preview.lift}/{preview.liftNeeded} · Cost ${preview.cost} of ${s.budget} · Clean flight{' '}
-              <b>{clean}%</b>
-              {s.nextLaunchBonus !== 0 && ` · card bonus ${s.nextLaunchBonus > 0 ? '+' : ''}${s.nextLaunchBonus}%`}
+              <Odds p={clean} />
+              {s.nextLaunchBonus !== 0 && ` · cards: ${boostWord(s.nextLaunchBonus)}`}
             </p>
             <ul class="phases">
               {preview.phases.map((x) => (
                 <li key={x.phase}>
-                  {x.phase} <meter min={0} max={100} value={x.reliability} /> {x.reliability}%
+                  {x.phase} <Odds p={x.reliability} />
                 </li>
               ))}
             </ul>

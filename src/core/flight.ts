@@ -10,6 +10,7 @@
 import type { CrewAbility, FlightPhase, MissionResult, Ruleset } from '../content/types.ts';
 import type { Action } from './actions.ts';
 import { crisisOptions, fillText, finalOdds, pickCrisisEvent } from './crisis.ts';
+import { boostWord, likelihood } from './likelihood.ts';
 import { getAstronaut, getEvent, getMilestone, getMission, getPart, getTrait } from './lookup.ts';
 import { rollPercent } from './rng.ts';
 import { crewNames, previewLaunch } from './rocket.ts';
@@ -107,7 +108,7 @@ export function useAbility(s: GameState, r: Ruleset, crewId: string): void {
   if (!view) throw new Error('That astronaut has no ability to use on this phase');
   flight.usedAbilities.push(crewId);
   flight.boost += view.ability.bonus;
-  flight.lines.push(`${view.crewName}: ${view.ability.name} (+${view.ability.bonus}%).`);
+  flight.lines.push(`${view.crewName}: ${view.ability.name} (${boostWord(view.ability.bonus)}).`);
 }
 
 /** Roll the current phase, then keep flying until the next real choice. */
@@ -154,7 +155,7 @@ function rollPhase(s: GameState, r: Ruleset): void {
     resolveMission(s, r, crewed ? 'abort' : 'lost');
     return;
   }
-  flight.lines.push(`${label(phase)}: nominal (${odds}%).`);
+  flight.lines.push(`${label(phase)}: nominal.`);
   if (rollPercent(s.rng, r.balance.minorCrisisPerPhase * 100)) {
     const event = pickCrisisEvent(r, s.rng, phase, 'minor', crewed);
     if (event) {
@@ -196,7 +197,9 @@ export function chooseOption(s: GameState, r: Ruleset, index: number): void {
     s.favors = s.favors.filter((f) => f !== favorId); // favors are used up
   }
 
-  flight.lines.push(`Your call: "${option.text}" (${odds}%): ${success ? 'it works' : 'it fails'}.`);
+  flight.lines.push(
+    `Your call: "${option.text}" (${likelihood(odds).toLowerCase()}): ${success ? 'it works' : 'it fails'}.`,
+  );
   flight.lines.push(fillText(s, flight, outcome.text));
   s.public += outcome.public ?? 0;
   s.congress += outcome.congress ?? 0;

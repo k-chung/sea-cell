@@ -1,7 +1,8 @@
 // Flight phase screens: a crisis decision, and the turn report afterwards.
 // Flights go phase by phase: spend margin or crew abilities on the current phase, then proceed.
 
-import { crisisOptions, currentOdds, fillText, lookup, usableAbilities } from '../../core/index.ts';
+import { boostWord, crisisOptions, currentOdds, fillText, lookup, usableAbilities } from '../../core/index.ts';
+import { Odds } from '../odds.tsx';
 import { CrewPortrait, Rocket } from '../art.tsx';
 import type { ScreenProps } from './props.ts';
 
@@ -57,7 +58,7 @@ function PhaseTrack({ s, r }: ScreenProps) {
         return (
           <li key={ph} class={state}>
             {state === 'done' ? '✔ ' : state === 'now' ? '▶ ' : ''}
-            {ph} <small>{flight.phaseOdds[i]}%</small>
+            {ph}
           </li>
         );
       })}
@@ -79,9 +80,9 @@ export function FlightScreen(p: ScreenProps) {
         <section class="phase-now">
           <p class="muted">Now flying</p>
           <h1>
-            {phase} <span class="odds">{currentOdds(s)}%</span>
+            {phase} <Odds p={currentOdds(s)} big />
           </h1>
-          {flight.boost > 0 && <p class="good">+{flight.boost}% from margin and crew</p>}
+          {flight.boost > 0 && <p class="good">Boosted by margin and crew</p>}
           <div class="flight-actions">
             <button
               type="button"
@@ -89,7 +90,7 @@ export function FlightScreen(p: ScreenProps) {
               disabled={flight.margin <= 0}
               onClick={() => act({ type: 'spendMargin' })}
             >
-              Spend margin +{r.balance.marginBoost}% <small>({flight.margin} left)</small>
+              Spend margin: {boostWord(r.balance.marginBoost)} <small>({flight.margin} left)</small>
             </button>
             {abilities.map((a) => (
               <button
@@ -100,7 +101,7 @@ export function FlightScreen(p: ScreenProps) {
                 data-arg={a.crewId}
                 onClick={() => act({ type: 'useAbility', crewId: a.crewId })}
               >
-                ★ {a.crewName}: {a.ability.name} +{a.ability.bonus}%
+                ★ {a.crewName}: {a.ability.name} ({boostWord(a.ability.bonus)})
               </button>
             ))}
             <button type="button" class="primary" data-act="proceed" onClick={() => act({ type: 'proceed' })}>
@@ -153,7 +154,7 @@ export function CrisisScreen(p: ScreenProps) {
                 {o.text}
                 <small>{BEST_CASE[o.bestCase]}</small>
               </span>
-              <b>{o.odds}%</b>
+              <Odds p={o.odds} />
             </button>
           ))}
         </div>

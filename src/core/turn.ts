@@ -4,6 +4,7 @@
 import type { Ruleset } from '../content/types.ts';
 import { dateLabel } from './calendar.ts';
 import { dealCards } from './cards.ts';
+import { likelihood } from './likelihood.ts';
 import { getFavor, getMilestone, getPart, getPersonnel, personnelBonus } from './lookup.ts';
 import { advanceRival } from './rival.ts';
 import { shuffle } from './rng.ts';
@@ -143,7 +144,7 @@ export function rewardLabel(r: Ruleset, c: RewardChoice): { title: string; detai
     const lift = p.slot === 'payload' ? `${p.payloadKind ?? 'payload'}` : `Lift ${p.lift}`;
     return {
       title: `New part: ${p.name} (${p.slot})`,
-      detail: `${lift}, reliability ${p.reliability}%, cost ${p.cost}, ${p.fuel}${seats}. ${p.description}`,
+      detail: `${lift}, ${likelihood(p.reliability).toLowerCase()} to work, cost ${p.cost}, ${p.fuel}${seats}. ${p.description}`,
     };
   }
   const f = getFavor(r, c.id);
